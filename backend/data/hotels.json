@@ -1,0 +1,24 @@
+[
+  {
+    "id": "hotel_001",
+    "name": "Grand Plaza",
+    "city": "Paris",
+    "country": "France",
+    "district": "center",
+    "base_price": 180,
+    "rating": 4.5,
+    "location_score": 9,
+    "zone_type": "sights,shopping"
+  },
+  {
+    "id": "hotel_002",
+    "name": "Cozy Inn",
+    "city": "Paris",
+    "country": "France",
+    "district": "montmartre",
+    "base_price": 120,
+    "rating": 4.2,
+    "location_score": 8,
+    "zone_type": "sights,nightlife"
+  }
+]

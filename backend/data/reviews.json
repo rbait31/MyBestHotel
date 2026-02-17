@@ -1,0 +1,20 @@
+[
+  {
+    "hotel_id": "hotel_001",
+    "text": "Great location but very noisy at night and room was small.",
+    "date": "2024-01-15",
+    "source": "mock"
+  },
+  {
+    "hotel_id": "hotel_001",
+    "text": "Clean rooms, friendly staff. Perfect for business trips.",
+    "date": "2024-02-20",
+    "source": "mock"
+  },
+  {
+    "hotel_id": "hotel_002",
+    "text": "Charming district, quiet at night. Small bathroom.",
+    "date": "2024-03-10",
+    "source": "mock"
+  }
+]
