@@ -6,6 +6,8 @@ My Best Hotel — FastAPI Backend
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.routes import hotels
+
 app = FastAPI(title="My Best Hotel API", version="0.1.0")
 
 app.add_middleware(
@@ -15,6 +17,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(hotels.router)
 
 
 @app.get("/")

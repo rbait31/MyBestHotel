@@ -2,15 +2,15 @@
 
 ## Фаза 0. Подготовка (≈1 ч)
 - [x] Создать `.env` из `.env.example`, получить GROQ_API_KEY
-- [ ] Установить зависимости backend: `pip install -r backend/requirements.txt`
-- [ ] Проверить запуск: `uvicorn backend.main:app --reload`
-- [ ] Дополнить `backend/data/hotels.json` и `reviews.json` тестовыми данными (5–10 отелей, 20–50 отзывов)
+- [x] Установить зависимости backend: `pip install -r backend/requirements.txt`
+- [x] Проверить запуск: `uvicorn backend.main:app --reload`
+- [x] Дополнить `backend/data/hotels.json` и `reviews.json` тестовыми данными (5–10 отелей, 20–50 отзывов)
 
 ## Фаза 1. Backend — данные и цены (≈2–3 ч)
-- [ ] Реализовать `review_loader.py`: загрузка hotels.json, reviews.json, выбор по city/country
-- [ ] Реализовать `price_engine.py`: формула с сезонностью, выходными, рейтингом, ±10% шум
-- [ ] Подключить роут `GET /api/hotels?city=...&country=...`
-- [ ] Проверить расчёт цен по датам через Postman/curl
+- [x] Реализовать `review_loader.py`: загрузка hotels.json, reviews.json, выбор по city/country
+- [x] Реализовать `price_engine.py`: формула с сезонностью, выходными, рейтингом, ±10% шум
+- [x] Подключить роут `GET /api/hotels?city=...&country=...`
+- [x] Проверить расчёт цен по датам через Postman/curl
 
 ## Фаза 2. Backend — AI и скоринг (≈6–8 ч)
 - [ ] Реализовать `ai_analysis.py`: вызов Groq, промпты для метрик (cleanliness, noise, comfort, location), рисков, плюсов/минусов, consistency
