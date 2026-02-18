@@ -20,5 +20,71 @@
     "rating": 4.2,
     "location_score": 8,
     "zone_type": "sights,nightlife"
+  },
+  {
+    "id": "hotel_003",
+    "name": "Le Marais Boutique",
+    "city": "Paris",
+    "country": "France",
+    "district": "le marais",
+    "base_price": 220,
+    "rating": 4.7,
+    "location_score": 9,
+    "zone_type": "sights,shopping,nightlife"
+  },
+  {
+    "id": "hotel_004",
+    "name": "Budget Stay Paris",
+    "city": "Paris",
+    "country": "France",
+    "district": "gare du nord",
+    "base_price": 85,
+    "rating": 3.8,
+    "location_score": 7,
+    "zone_type": "transportation"
+  },
+  {
+    "id": "hotel_005",
+    "name": "Louvre View Hotel",
+    "city": "Paris",
+    "country": "France",
+    "district": "1st arrondissement",
+    "base_price": 280,
+    "rating": 4.6,
+    "location_score": 10,
+    "zone_type": "sights,culture"
+  },
+  {
+    "id": "hotel_006",
+    "name": "Casa Mediterranea",
+    "city": "Barcelona",
+    "country": "Spain",
+    "district": "eixample",
+    "base_price": 150,
+    "rating": 4.4,
+    "location_score": 8,
+    "zone_type": "sights,shopping"
+  },
+  {
+    "id": "hotel_007",
+    "name": "Gothic Quarter Inn",
+    "city": "Barcelona",
+    "country": "Spain",
+    "district": "gothic quarter",
+    "base_price": 130,
+    "rating": 4.1,
+    "location_score": 9,
+    "zone_type": "sights,nightlife"
+  },
+  {
+    "id": "hotel_008",
+    "name": "Beach Front Barcelona",
+    "city": "Barcelona",
+    "country": "Spain",
+    "district": "barceloneta",
+    "base_price": 200,
+    "rating": 4.3,
+    "location_score": 8,
+    "zone_type": "beach,sights"
   }
 ]

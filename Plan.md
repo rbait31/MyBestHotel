@@ -1,7 +1,7 @@
 # План реализации My Best Hotel (MVP)
 
 ## Фаза 0. Подготовка (≈1 ч)
-- [ ] Создать `.env` из `.env.example`, получить GROQ_API_KEY
+- [x] Создать `.env` из `.env.example`, получить GROQ_API_KEY
 - [ ] Установить зависимости backend: `pip install -r backend/requirements.txt`
 - [ ] Проверить запуск: `uvicorn backend.main:app --reload`
 - [ ] Дополнить `backend/data/hotels.json` и `reviews.json` тестовыми данными (5–10 отелей, 20–50 отзывов)
