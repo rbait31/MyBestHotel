@@ -37,8 +37,8 @@
 - [x] Frontend: URL API в config.js
 - [x] Конфиги деплоя: Procfile, requirements.txt, vercel.json, DEPLOY.md
 - [ ] Деплой backend на Railway/Render (вручную)
-- [ ] Деплой frontend на Vercel (вручную)
-- [ ] Проверка полного сценария в проде
+- [x] Деплой frontend на Vercel (вручную) ✅ работает
+- [ ] Проверка полного сценария в проде (backend + frontend)
 
 ## Резерв (если время есть)
 - [ ] Red Flag Detector: подсветка слов unsafe, dirty, scam, noise all night, broken
