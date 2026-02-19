@@ -5,11 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Best Hotel</title>
     <link rel="stylesheet" href="css/style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 </head>
-<body>
-    <h1>My Best Hotel</h1>
-    <p>Форма поиска и результаты — см. ARCHITECTURE.md</p>
+<body x-data="app()" x-init="init()">
+    <header class="header">
+        <h1>My Best Hotel</h1>
+        <p class="tagline">Выбор отеля по отзывам и вашему профилю</p>
+    </header>
+
+    <main class="main">
+        <div x-show="backendOk === false" x-transition class="message message-error message-backend">
+            Бэкенд не запущен. В другом терминале выполните: <code>cd c:\Work\MyBestHotel</code>, затем <code>uvicorn backend.main:app --reload</code>
+        </div>
+        <!-- Форма поиска -->
+        <section class="card search-form">
+            <h2>Поиск</h2>
+            <form @submit.prevent="runSearch()" class="form">
+                <div class="form-row">
+                    <label for="search-city">
+                        Город
+                        <select id="search-city" name="city" autocomplete="address-level2" x-model="city" :class="{ 'field-invalid': invalidFields.city }">
+                            <option value="">Выберите город</option>
+                            <option value="Paris">Paris</option>
+                            <option value="Barcelona">Barcelona</option>
+                        </select>
+                    </label>
+                    <label for="search-country">
+                        Страна
+                        <select id="search-country" name="country" autocomplete="country-name" x-model="country" :class="{ 'field-invalid': invalidFields.country }">
+                            <option value="">Выберите страну</option>
+                            <option value="France">France</option>
+                            <option value="Spain">Spain</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label for="search-checkin">Заезд <input id="search-checkin" name="check_in" type="date" autocomplete="off" x-model="check_in" :class="{ 'field-invalid': invalidFields.check_in }" /></label>
+                    <label for="search-checkout">Выезд <input id="search-checkout" name="check_out" type="date" autocomplete="off" x-model="check_out" :class="{ 'field-invalid': invalidFields.check_out }" /></label>
+                </div>
+                <p x-show="error === 'Введите все данные!'" class="form-hint form-hint-error" x-text="'Введите все данные!'"></p>
+                <button type="submit" class="btn btn-primary" :disabled="loading">Найти</button>
+            </form>
+        </section>
+
+        <!-- Профиль путешественника -->
+        <section class="card profile-section">
+            <h2>Профиль путешественника</h2>
+            <div class="form">
+                <div class="form-row">
+                    <label for="profile-trip-type">
+                        Тип поездки
+                        <select id="profile-trip-type" name="trip_type" autocomplete="off" x-model="profile.trip_type">
+                            <option value="leisure">Отдых</option>
+                            <option value="business">Бизнес</option>
+                            <option value="family">Семья</option>
+                            <option value="group">Группа</option>
+                        </select>
+                    </label>
+                    <label for="profile-comfort">
+                        Уровень комфорта
+                        <select id="profile-comfort" name="comfort_level" autocomplete="off" x-model="profile.comfort_level">
+                            <option value="budget">Бюджет</option>
+                            <option value="comfort">Комфорт</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label for="profile-budget-min">Бюджет мин (€/ночь) <input id="profile-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_min" placeholder="—" /></label>
+                    <label for="profile-budget-max">Бюджет макс (€/ночь) <input id="profile-budget-max" name="budget_max" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_max" placeholder="—" /></label>
+                </div>
+                <div class="form-row">
+                    <label><input id="profile-with-car" name="with_car" type="checkbox" autocomplete="off" x-model="profile.with_car" /> С машиной</label>
+                    <label><input id="profile-with-pets" name="with_pets" type="checkbox" autocomplete="off" x-model="profile.with_pets" /> С питомцами</label>
+                </div>
+                <p class="form-hint">Темы: cleanliness, location, noise, internet, staff, parking, safety — сохраняются в профиле.</p>
+                <div class="profile-actions">
+                    <button type="button" class="btn btn-secondary" @click="saveProfile()">Сохранить профиль</button>
+                    <button type="button" class="btn btn-secondary" @click="exportProfile()">Экспорт JSON</button>
+                    <label class="btn btn-secondary">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Сообщения -->
+        <div x-show="error" x-transition class="message message-error" x-text="error" x-cloak id="msg-error"></div>
+        <div x-show="loading" x-transition class="message message-loading" id="msg-loading">
+            Идёт поиск с AI-анализом, подождите 10–30 сек…
+        </div>
+
+        <!-- Результаты: список отелей -->
+        <section class="results" x-show="hotels.length > 0" id="results">
+            <h2>Найдено отелей: <span x-text="hotels.length"></span></h2>
+            <div class="hotel-grid">
+                <template x-for="h in hotels" :key="h.id">
+                    <article class="card hotel-card">
+                        <h3 class="hotel-name" x-text="h.name"></h3>
+                        <p class="hotel-meta"><span x-text="h.district"></span> · Рейтинг <span x-text="h.rating"></span></p>
+                        <template x-if="h.price_per_night != null">
+                            <p class="hotel-price"><strong x-text="'€ ' + h.price_per_night.toFixed(0)"></strong> / ночь</p>
+                        </template>
+                        <p class="hotel-location" x-text="'Локация: ' + h.location_score + '/10'"></p>
+                        <div class="hotel-extra" x-show="h.quality_score != null">
+                            <p><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Value: <span x-text="h.value_for_money"></span></p>
+                            <p x-show="h.red_flags && h.red_flags.length" class="red-flags">⚠ <span x-text="h.red_flags.join(', ')"></span></p>
+                            <p x-show="h.pros && h.pros.length"><strong>Плюсы:</strong> <span x-text="h.pros.join('; ')"></span></p>
+                            <p x-show="h.cons && h.cons.length"><strong>Минусы:</strong> <span x-text="h.cons.join('; ')"></span></p>
+                            <p class="verdict" x-show="h.verdict" x-text="h.verdict"></p>
+                        </div>
+                    </article>
+                </template>
+            </div>
+        </section>
+        <section x-show="!loading && hotels.length === 0 && lastSearched" class="message">
+            Отелей не найдено по заданным параметрам. Проверьте город, страну и даты.
+        </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/profile.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
