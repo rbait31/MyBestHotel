@@ -33,10 +33,11 @@
 - `cd frontend` → `python serve.py` — без кеширования (свежие файлы при каждой загрузке)
 
 ## Фаза 4. Интеграция и деплой (≈2–3 ч)
-- [ ] CORS: в backend указать origin фронта (Vercel URL)
-- [ ] Frontend: вынести URL API в конфиг (env или константа)
-- [ ] Деплой backend на Railway/Render
-- [ ] Деплой frontend на Vercel
+- [x] CORS: в backend — ALLOWED_ORIGINS (env)
+- [x] Frontend: URL API в config.js
+- [x] Конфиги деплоя: Procfile, requirements.txt, vercel.json, DEPLOY.md
+- [ ] Деплой backend на Railway/Render (вручную)
+- [ ] Деплой frontend на Vercel (вручную)
 - [ ] Проверка полного сценария в проде
 
 ## Резерв (если время есть)
