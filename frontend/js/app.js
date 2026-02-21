@@ -25,10 +25,10 @@ function app() {
     invalidFields: { city: false, country: false, check_in: false, check_out: false },
     backendOk: null,
     lastSearched: false,
-    /** Показывать ли селектор страны (город в нескольких странах или неизвестен) */
-    showCountrySelect: false,
     /** Варианты для селектора страны */
     countryOptions: [],
+    /** true — страна подставлена автоматически, селектор заблокирован */
+    countryLocked: false,
 
     async init() {
       this.profile = loadProfile();
@@ -45,24 +45,24 @@ function app() {
     onCityChange(city) {
       if (!city || !city.trim()) {
         this.country = "";
-        this.showCountrySelect = false;
         this.countryOptions = [];
+        this.countryLocked = false;
         return;
       }
       const c = city.trim();
       if (CITY_TO_COUNTRY[c]) {
         this.country = CITY_TO_COUNTRY[c];
-        this.showCountrySelect = false;
-        this.countryOptions = [];
+        this.countryOptions = [CITY_TO_COUNTRY[c]];
+        this.countryLocked = true;
       } else if (CITY_TO_MULTIPLE[c]) {
         this.countryOptions = CITY_TO_MULTIPLE[c];
-        this.showCountrySelect = true;
+        this.countryLocked = false;
         if (!this.country || !this.countryOptions.includes(this.country)) {
           this.country = this.countryOptions[0];
         }
       } else {
         this.countryOptions = ALL_COUNTRIES;
-        this.showCountrySelect = true;
+        this.countryLocked = false;
         this.country = "";
       }
     },

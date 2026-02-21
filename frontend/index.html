@@ -33,18 +33,14 @@
                             <option value="Madrid">Madrid</option>
                         </select>
                     </label>
-                    <label for="search-country" x-show="showCountrySelect">
-                        Страна / регион
-                        <select id="search-country" name="country" autocomplete="country-name" x-model="country" :class="{ 'field-invalid': invalidFields.country }">
+                    <label for="search-country">
+                        Страна
+                        <select id="search-country" name="country" autocomplete="country-name" x-model="country" :class="{ 'field-invalid': invalidFields.country }" :disabled="countryLocked">
                             <option value="">Выберите страну</option>
                             <template x-for="opt in countryOptions" :key="opt">
                                 <option :value="opt" x-text="opt"></option>
                             </template>
                         </select>
-                    </label>
-                    <label x-show="!showCountrySelect && country" class="country-auto">
-                        Страна
-                        <span class="country-value" x-text="country"></span>
                     </label>
                 </div>
                 <div class="form-row">

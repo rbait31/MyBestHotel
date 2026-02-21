@@ -105,18 +105,6 @@ select.field-invalid:focus {
   flex: 1 1 180px;
 }
 
-.country-auto .country-value {
-  display: block;
-  margin-top: 0.25rem;
-  padding: 0.5rem 0.6rem;
-  background: #f0f5f0;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  max-width: 280px;
-  font-weight: 500;
-  color: var(--text);
-}
-
 .form-hint {
   font-size: 0.85rem;
   color: var(--text-muted);
