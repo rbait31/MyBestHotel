@@ -51,9 +51,10 @@ function app() {
       }
       const c = city.trim();
       if (CITY_TO_COUNTRY[c]) {
-        this.country = CITY_TO_COUNTRY[c];
-        this.countryOptions = [CITY_TO_COUNTRY[c]];
+        const cnt = CITY_TO_COUNTRY[c];
+        this.countryOptions = [cnt];
         this.countryLocked = true;
+        this.country = cnt;
       } else if (CITY_TO_MULTIPLE[c]) {
         this.countryOptions = CITY_TO_MULTIPLE[c];
         this.countryLocked = false;

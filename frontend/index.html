@@ -35,11 +35,10 @@
                     </label>
                     <label for="search-country">
                         Страна
-                        <select id="search-country" name="country" autocomplete="country-name" x-model="country" :class="{ 'field-invalid': invalidFields.country }" :disabled="countryLocked">
+                        <select id="search-country" name="country" autocomplete="country-name" x-model="country" :class="{ 'field-invalid': invalidFields.country, 'field-auto': countryLocked }" :disabled="countryLocked">
                             <option value="">Выберите страну</option>
-                            <template x-for="opt in countryOptions" :key="opt">
-                                <option :value="opt" x-text="opt"></option>
-                            </template>
+                            <option value="France">France</option>
+                            <option value="Spain">Spain</option>
                         </select>
                     </label>
                 </div>

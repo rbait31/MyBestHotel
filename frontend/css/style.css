@@ -91,6 +91,12 @@ select.field-invalid:focus {
   outline-color: #b33;
 }
 
+select.field-auto {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+  color: #1b5e20;
+}
+
 .form label input[type="checkbox"] {
   margin-right: 0.5rem;
 }
