@@ -1,6 +1,17 @@
 /**
  * My Best Hotel — основная логика приложения (Alpine.js data).
+ * Город → страна (однозначно)
  */
+const CITY_TO_COUNTRY = {
+  Paris: "France",
+  Barcelona: "Spain",
+  Madrid: "Spain",
+};
+/** Город → [страны/штаты], если город есть в нескольких странах */
+const CITY_TO_MULTIPLE = {};
+/** Все страны для fallback (неизвестный город) */
+const ALL_COUNTRIES = ["France", "Spain"];
+
 function app() {
   return {
     city: "",
@@ -14,14 +25,45 @@ function app() {
     invalidFields: { city: false, country: false, check_in: false, check_out: false },
     backendOk: null,
     lastSearched: false,
+    /** Показывать ли селектор страны (город в нескольких странах или неизвестен) */
+    showCountrySelect: false,
+    /** Варианты для селектора страны */
+    countryOptions: [],
 
     async init() {
       this.profile = loadProfile();
+      this.$watch("city", (value) => this.onCityChange(value));
+      this.onCityChange(this.city);
       try {
         const r = await fetch((window.API_BASE || "http://127.0.0.1:8000") + "/", { method: "GET" });
         this.backendOk = r.ok;
       } catch {
         this.backendOk = false;
+      }
+    },
+
+    onCityChange(city) {
+      if (!city || !city.trim()) {
+        this.country = "";
+        this.showCountrySelect = false;
+        this.countryOptions = [];
+        return;
+      }
+      const c = city.trim();
+      if (CITY_TO_COUNTRY[c]) {
+        this.country = CITY_TO_COUNTRY[c];
+        this.showCountrySelect = false;
+        this.countryOptions = [];
+      } else if (CITY_TO_MULTIPLE[c]) {
+        this.countryOptions = CITY_TO_MULTIPLE[c];
+        this.showCountrySelect = true;
+        if (!this.country || !this.countryOptions.includes(this.country)) {
+          this.country = this.countryOptions[0];
+        }
+      } else {
+        this.countryOptions = ALL_COUNTRIES;
+        this.showCountrySelect = true;
+        this.country = "";
       }
     },
 
