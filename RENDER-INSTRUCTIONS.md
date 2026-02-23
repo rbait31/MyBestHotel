@@ -99,7 +99,7 @@ https://mybesthotel-api.onrender.com
 Откройте `frontend/js/config.js` и замените `API_BASE`:
 
 ```javascript
-window.API_BASE = "https://mybesthotel-api.onrender.com";
+window.API_BASE = "https://mybesthotel.onrender.com";
 ```
 
 (подставьте ваш реальный URL из Шага 6)
@@ -122,8 +122,8 @@ Vercel автоматически пересоберёт и задеплоит �
 
 ## Проверка
 
-1. Откройте `https://mybesthotel-api.onrender.com` — должна вернуться JSON: `{"message":"My Best Hotel API","docs":"/docs"}`
-2. Откройте `https://mybesthotel-api.onrender.com/docs` — Swagger UI
+1. Откройте `https://mybesthotel.onrender.com` — должна вернуться JSON: `{"message":"My Best Hotel API","docs":"/docs"}`
+2. Откройте `https://mybesthotel.onrender.com/docs` — Swagger UI
 3. Откройте фронт на Vercel и выполните поиск отелей
 4. На странице «Требования к гостинице» измените профиль и нажмите «Сохранить» — данные сохраняются в PostgreSQL и доступны с любого устройства
 
