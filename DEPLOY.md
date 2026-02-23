@@ -8,6 +8,8 @@
 
 ### Render (рекомендуется для хакатона)
 
+Подробная инструкция: см. [RENDER-INSTRUCTIONS.md](RENDER-INSTRUCTIONS.md)
+
 1. [render.com](https://render.com) → New → Web Service
 2. Подключите репозиторий GitHub
 3. **Settings → Build & Deploy:**
