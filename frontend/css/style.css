@@ -185,16 +185,17 @@ input.field-invalid:focus {
   background: #ddd;
 }
 
-.btn-json {
+.btn.btn-json,
+label.btn.btn-json {
   min-width: 10rem;
   width: 10rem;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
   text-align: center;
-  cursor: pointer;
 }
 
-.profile-actions .btn-json {
+.profile-actions .btn.btn-json,
+.profile-actions label.btn.btn-json {
   display: inline-flex;
   align-items: center;
   justify-content: center;
