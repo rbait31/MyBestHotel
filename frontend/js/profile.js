@@ -1,7 +1,21 @@
 /**
- * Профиль путешественника: localStorage, export/import JSON.
+ * Профиль путешественника: API (PostgreSQL) с fallback на localStorage.
  */
 const PROFILE_KEY = "mybesthotel_profile";
+const USER_ID_KEY = "mybesthotel_user_id";
+
+function getUserId() {
+  let id = localStorage.getItem(USER_ID_KEY);
+  if (!id) {
+    id = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+    localStorage.setItem(USER_ID_KEY, id);
+  }
+  return id;
+}
 
 const defaultProfile = () => ({
   trip_type: "leisure",
@@ -13,7 +27,7 @@ const defaultProfile = () => ({
   themes: ["cleanliness", "location", "noise", "internet"],
 });
 
-function loadProfile() {
+function loadProfileLocal() {
   try {
     const raw = localStorage.getItem(PROFILE_KEY);
     if (!raw) return defaultProfile();
@@ -24,20 +38,70 @@ function loadProfile() {
   }
 }
 
-function saveProfile(profile) {
+function saveProfileLocal(profile) {
   localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
+async function loadProfileFromAPI() {
+  const base = window.API_BASE || "http://127.0.0.1:8000";
+  const userId = getUserId();
+  const r = await fetch(`${base}/api/profile?user_id=${encodeURIComponent(userId)}`, { method: "GET" });
+  if (!r.ok) return null;
+  const data = await r.json();
+  return data?.profile ? { ...defaultProfile(), ...data.profile } : null;
+}
+
+async function saveProfileToAPI(profile) {
+  const base = window.API_BASE || "http://127.0.0.1:8000";
+  const userId = getUserId();
+  const r = await fetch(`${base}/api/profile`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: userId, profile }),
+  });
+  return r.ok;
+}
+
+/**
+ * Загрузить профиль: сначала API, при ошибке — localStorage.
+ */
+async function loadProfile() {
+  try {
+    const p = await loadProfileFromAPI();
+    if (p) {
+      saveProfileLocal(p);
+      return p;
+    }
+  } catch (_) {}
+  return loadProfileLocal();
+}
+
+/**
+ * Сохранить профиль: сначала API, при ошибке — localStorage.
+ */
+async function saveProfile(profile) {
+  try {
+    const ok = await saveProfileToAPI(profile);
+    if (ok) {
+      saveProfileLocal(profile);
+      return true;
+    }
+  } catch (_) {}
+  saveProfileLocal(profile);
+  return false;
 }
 
 function exportProfileJSON(profile) {
   return JSON.stringify(profile, null, 2);
 }
 
-function importProfileJSON(jsonString) {
+async function importProfileJSON(jsonString) {
   try {
     const p = JSON.parse(jsonString);
     if (typeof p !== "object" || p === null) return null;
-    saveProfile({ ...defaultProfile(), ...p });
-    return loadProfile();
+    const merged = { ...defaultProfile(), ...p };
+    await saveProfile(merged);
+    return merged;
   } catch {
     return null;
   }

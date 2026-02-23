@@ -63,12 +63,12 @@
       function requirementsApp() {
         return {
           profile: defaultProfile(),
-          init() {
-            this.profile = loadProfile();
+          async init() {
+            this.profile = await loadProfile();
           },
-          saveProfile() {
-            saveProfile(this.profile);
-            alert("Требования сохранены.");
+          async saveProfile() {
+            const ok = await saveProfile(this.profile);
+            alert(ok ? "Требования сохранены на сервере." : "Сохранено локально (сервер недоступен).");
           },
           exportProfile() {
             const json = exportProfileJSON(this.profile);
@@ -79,15 +79,15 @@
             a.click();
             URL.revokeObjectURL(a.href);
           },
-          importProfile(event) {
+          async importProfile(event) {
             const file = event.target.files?.[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = () => {
-              const next = importProfileJSON(reader.result);
+            reader.onload = async () => {
+              const next = await importProfileJSON(reader.result);
               if (next) {
                 this.profile = next;
-                alert("Требования загружены.");
+                alert("Требования загружены и сохранены.");
               } else {
                 alert("Неверный JSON.");
               }

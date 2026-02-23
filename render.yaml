@@ -1,5 +1,6 @@
 # Render Blueprint — деплой бэкенда My Best Hotel
 # https://render.com/docs/blueprint-spec
+# PostgreSQL: New → PostgreSQL → в Web Service добавить DATABASE_URL (Render подставит автоматически при Link)
 services:
   - type: web
     name: mybesthotel-api
@@ -10,4 +11,6 @@ services:
       - key: GROQ_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
+        sync: false
+      - key: DATABASE_URL
         sync: false

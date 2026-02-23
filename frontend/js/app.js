@@ -31,7 +31,7 @@ function app() {
     countryLocked: false,
 
     async init() {
-      this.profile = loadProfile();
+      this.profile = await loadProfile();
       this.$watch("city", (value) => this.onCityChange(value));
       this.onCityChange(this.city);
       try {

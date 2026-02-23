@@ -7,9 +7,18 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.routes import hotels, search, analyze
+from backend.api.routes import hotels, search, analyze, profile
+from backend.database import get_engine, init_db
 
 app = FastAPI(title="My Best Hotel API", version="0.1.0")
+
+
+@app.on_event("startup")
+def on_startup():
+    """Создать таблицы БД при старте (если PostgreSQL подключён)."""
+    engine = get_engine()
+    if engine:
+        init_db(engine)
 
 # CORS: ALLOWED_ORIGINS — через запятую (например https://mybesthotel.vercel.app)
 # Для разработки: "*" или не задано
@@ -27,6 +36,7 @@ app.add_middleware(
 app.include_router(hotels.router)
 app.include_router(search.router)
 app.include_router(analyze.router)
+app.include_router(profile.router)
 
 
 @app.get("/")

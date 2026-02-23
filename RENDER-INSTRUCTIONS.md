@@ -45,7 +45,24 @@ git push origin main
 
 ---
 
-## Шаг 4. Добавить переменные окружения
+## Шаг 4. Добавить PostgreSQL (для хранения профиля пользователя)
+
+1. В Render Dashboard нажмите **New +** → **PostgreSQL**
+2. **Name:** `mybesthotel-db` (или любое)
+3. **Region:** тот же, что у Web Service
+4. **Plan:** Free
+5. Нажмите **Create Database**
+6. После создания откройте БД → вкладка **Info** → скопируйте **Internal Database URL** (или **External Database URL** для доступа с локальной машины)
+7. Вернитесь в ваш Web Service → **Environment** → **Add Environment Variable**
+8. Key: `DATABASE_URL`, Value: вставьте скопированный URL
+
+   Либо нажмите **Link Resource** в Web Service и выберите созданную БД — Render подставит `DATABASE_URL` автоматически.
+
+**Без PostgreSQL** профиль будет храниться в памяти (теряется при перезапуске) и в localStorage в браузере.
+
+---
+
+## Шаг 5. Добавить остальные переменные окружения
 
 В разделе **Environment** добавьте:
 
@@ -59,13 +76,13 @@ git push origin main
 
 ---
 
-## Шаг 5. Создать сервис
+## Шаг 6. Создать сервис
 
 Нажмите **Create Web Service**. Render начнёт сборку и деплой. Подождите 2–5 минут.
 
 ---
 
-## Шаг 6. Скопировать URL бэкенда
+## Шаг 7. Скопировать URL бэкенда
 
 После успешного деплоя Render покажет URL вида:
 
@@ -89,7 +106,7 @@ window.API_BASE = "https://mybesthotel-api.onrender.com";
 
 ---
 
-## Шаг 8. Задеплоить изменения фронта на Vercel
+## Шаг 9. Задеплоить изменения фронта на Vercel
 
 Если фронт уже на Vercel — просто запушьте изменения:
 
@@ -108,6 +125,7 @@ Vercel автоматически пересоберёт и задеплоит �
 1. Откройте `https://mybesthotel-api.onrender.com` — должна вернуться JSON: `{"message":"My Best Hotel API","docs":"/docs"}`
 2. Откройте `https://mybesthotel-api.onrender.com/docs` — Swagger UI
 3. Откройте фронт на Vercel и выполните поиск отелей
+4. На странице «Требования к гостинице» измените профиль и нажмите «Сохранить» — данные сохраняются в PostgreSQL и доступны с любого устройства
 
 ---
 
