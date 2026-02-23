@@ -11,7 +11,6 @@
 </head>
 <body x-data="requirementsApp()" x-init="init()">
     <header class="header">
-        <a href="index.html" class="header-back">← Поиск</a>
         <h1>My Best Hotel</h1>
         <p class="tagline">Требования к гостинице</p>
     </header>
@@ -49,8 +48,11 @@
                 <p class="form-hint">Темы: cleanliness, location, noise, internet, staff, parking, safety — сохраняются в профиле.</p>
                 <div class="profile-actions">
                     <button type="button" class="btn btn-primary" @click="saveProfile()">Сохранить</button>
-                    <button type="button" class="btn btn-secondary" @click="exportProfile()">Экспорт JSON</button>
-                    <label class="btn btn-secondary">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
+                    <div class="profile-actions-center">
+                        <button type="button" class="btn btn-secondary btn-json" title="Для тестовых целей" @click="exportProfile()">Экспорт JSON</button>
+                        <label class="btn btn-secondary btn-json" title="Для тестовых целей">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
+                    </div>
+                    <a href="index.html" class="btn btn-secondary profile-back">← Поиск</a>
                 </div>
             </div>
         </section>
