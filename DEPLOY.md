@@ -18,6 +18,7 @@
 4. **Settings → Environment** → Add Environment Variable:
    - `GROQ_API_KEY` — ключ с [console.groq.com](https://console.groq.com)
    - `ALLOWED_ORIGINS` — URL фронтенда (например `https://mybesthotel.vercel.app`)
+   - `DATABASE_URL` — строка подключения PostgreSQL (см. [RENDER-INSTRUCTIONS.md](RENDER-INSTRUCTIONS.md))
 
 ### Где в Render вводить Build/Start Command
 
@@ -60,19 +61,22 @@ Dashboard → ваш Web Service → вкладка **Settings** → разде�
 
 ### Настройка API URL
 
-Перед деплоем в `frontend/js/config.js` укажите URL бэкенда:
+В `frontend/js/config.js` укажите URL бэкенда:
 
 ```javascript
-window.API_BASE = "https://YOUR-BACKEND.onrender.com";
+window.API_BASE = "https://mybesthotel.onrender.com";
 ```
+
+**Важно:** `config.js` должен подключаться на всех страницах, включая `requirements.html`. Без этого страница «Требования к гостинице» будет обращаться к `127.0.0.1:8000`.
 
 ---
 
 ## Порядок деплоя
 
-1. **Backend** — задеплойте первым, скопируйте URL
-2. **Frontend** — в `config.js` укажите URL бэкенда
-3. **Backend** — в `ALLOWED_ORIGINS` добавьте URL Vercel (CORS)
+1. **Backend** — задеплойте первым (Render), скопируйте URL
+2. **PostgreSQL** — создайте на Render, добавьте `DATABASE_URL` в Environment backend
+3. **Frontend** — в `config.js` укажите URL бэкенда, убедитесь что `config.js` подключён в `requirements.html`
+4. **Backend** — в `ALLOWED_ORIGINS` добавьте URL Vercel (CORS)
 
 ---
 

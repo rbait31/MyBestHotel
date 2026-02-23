@@ -11,7 +11,7 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  FRONTEND (HTML + Alpine.js/Vanilla JS)                                      │
 │  • Форма поиска (город, даты, профиль)                                       │
-│  • Профиль путешественника (localStorage + JSON export/import)               │
+│  • Требования к гостинице: API → PostgreSQL, fallback localStorage           │
 │  • Результаты (отели, scores, риски, плюсы/минусы)                           │
 └─────────────────────────────────────────────────────────────────────────────┘
                                        │
@@ -21,7 +21,7 @@
 │  BACKEND (FastAPI)                                                           │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐ │
 │  │ /search      │  │ /hotels      │  │ /analyze     │  │ /profile         │ │
-│  │ /zones       │  │ /reviews     │  │ /score       │  │ (optional)       │ │
+│  │ /zones       │  │ /reviews     │  │ /score       │  │ GET/POST         │ │
 │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────────┘
                                        │
@@ -55,8 +55,9 @@
 | AI | Groq API (llama-3.1-8b-instant) | Бесплатный тариф, быстрый inference |
 | Цены | Mock Price Engine | JSON + формула с сезонностью |
 | Отзывы | JSON-файлы | hotels.json, reviews.json |
-| Профиль | localStorage | + export/import JSON |
-| Деплой | Vercel (frontend) + Railway/Render (backend) | Бесплатные планы |
+| Профиль | PostgreSQL (API) + localStorage fallback | GET/POST /api/profile |
+| БД | PostgreSQL (Render) | Хранение профиля |
+| Деплой | Vercel (frontend) + Render (backend + PostgreSQL) | Бесплатные планы |
 
 ---
 
@@ -66,7 +67,7 @@
 1. Пользователь вводит:
    - Город, страна
    - Даты заезда/выезда
-   - Профиль (тип поездки, бюджет, темы интересов) — из localStorage или ввод
+   - Профиль (тип поездки, бюджет, темы интересов) — загружается из API (PostgreSQL) или localStorage
 
 2. Frontend → POST /api/search
    {
@@ -106,11 +107,13 @@ MyBestHotel/
 │
 ├── frontend/                    # Статический фронтенд (Vercel)
 │   ├── index.html               # Главная страница
+│   ├── requirements.html        # Требования к гостинице (профиль)
 │   ├── css/
 │   │   └── style.css
 │   ├── js/
+│   │   ├── config.js            # API_BASE (URL бэкенда)
 │   │   ├── app.js               # Логика приложения
-│   │   ├── profile.js           # Профиль: localStorage, export/import
+│   │   ├── profile.js           # Профиль: API (PostgreSQL), fallback localStorage
 │   │   └── api.js               # Вызовы к backend
 │   └── assets/
 │       └── (иконки при необходимости)
@@ -125,9 +128,14 @@ MyBestHotel/
 │   │   ├── routes/
 │   │   │   ├── search.py        # POST /api/search
 │   │   │   ├── hotels.py        # GET /api/hotels, GET /api/hotels/{id}
-│   │   │   └── analyze.py       # POST /api/analyze (отдельный анализ отеля)
+│   │   │   ├── analyze.py       # POST /api/analyze (отдельный анализ отеля)
+│   │   │   └── profile.py       # GET/POST /api/profile (PostgreSQL)
 │   │   └── schemas.py           # Pydantic модели запросов/ответов
 │   │
+│   ├── database.py              # PostgreSQL, fallback in-memory
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── profile.py           # UserProfile
 │   ├── services/
 │   │   ├── __init__.py
 │   │   ├── price_engine.py      # Mock price engine (Подход 1-2)
@@ -185,7 +193,7 @@ MyBestHotel/
 ]
 ```
 
-### 5.3 Профиль путешественника (localStorage / API)
+### 5.3 Профиль путешественника (API / localStorage)
 
 ```json
 {
@@ -283,15 +291,18 @@ final_score = (
 | GET | `/api/hotels` | Список отелей по городу |
 | GET | `/api/hotels/{id}` | Детали отеля |
 | POST | `/api/analyze` | Анализ одного отеля (для выбранного пользователем) |
+| GET | `/api/profile?user_id=...` | Получить профиль (PostgreSQL) |
+| POST | `/api/profile` | Сохранить профиль (PostgreSQL) |
 
 ---
 
 ## 10. Деплой
 
-- **Frontend:** `frontend/` → Vercel (static site)
-- **Backend:** `backend/` → Railway или Render (Docker/Procfile)
-- **CORS:** Backend должен разрешать запросы с домена Vercel
-- **API URL:** Переменная окружения во frontend, например `VITE_API_URL` или хардкод для MVP
+- **Frontend:** `frontend/` → Vercel (Root Directory: `frontend`)
+- **Backend:** корень репо → Render (Web Service)
+- **PostgreSQL:** Render → New PostgreSQL, `DATABASE_URL` в Environment
+- **CORS:** `ALLOWED_ORIGINS` = URL Vercel (например `https://mybesthotel.vercel.app`)
+- **API URL:** в `frontend/js/config.js` задаётся `window.API_BASE`; `config.js` обязательно подключать на всех страницах (в т.ч. `requirements.html`)
 
 ---
 

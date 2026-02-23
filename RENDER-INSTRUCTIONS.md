@@ -84,25 +84,25 @@ git push origin main
 
 ## Шаг 7. Скопировать URL бэкенда
 
-После успешного деплоя Render покажет URL вида:
+После успешного деплоя Render покажет URL. Он зависит от имени сервиса:
+- Сервис **MyBestHotel** → `https://mybesthotel.onrender.com`
+- Сервис **mybesthotel-api** → `https://mybesthotel-api.onrender.com`
 
-```
-https://mybesthotel-api.onrender.com
-```
-
-Скопируйте его.
+Скопируйте ваш реальный URL.
 
 ---
 
-## Шаг 7. Обновить config.js на фронтенде
+## Шаг 8. Обновить config.js на фронтенде
 
-Откройте `frontend/js/config.js` и замените `API_BASE`:
+Откройте `frontend/js/config.js` и задайте `API_BASE`:
 
 ```javascript
 window.API_BASE = "https://mybesthotel.onrender.com";
 ```
 
-(подставьте ваш реальный URL из Шага 6)
+(подставьте ваш реальный URL из Шага 7)
+
+**Обязательно:** `config.js` должен подключаться на странице `requirements.html` (перед `profile.js`), иначе профиль будет обращаться к `127.0.0.1:8000`.
 
 ---
 
@@ -133,3 +133,4 @@ Vercel автоматически пересоберёт и задеплоит �
 
 - **Бесплатный план Render:** сервис «засыпает» после ~15 минут без запросов. Первый запрос после пробуждения занимает 30–60 секунд.
 - **CORS:** `ALLOWED_ORIGINS` должен точно совпадать с доменом фронта (включая `https://`).
+- **config.js:** подключать на всех страницах (`index.html`, `requirements.html`). Без него `profile.js` использует fallback `127.0.0.1:8000` и вы увидите «Сервер недоступен».

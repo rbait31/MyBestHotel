@@ -1,6 +1,12 @@
-# MyBestHotel
+# My Best Hotel
 
-Система, которая собирает отзывы о гостиницах из разных источников, анализирует их и помогает выбрать лучшую с учётом профиля путешественника.
+Система выбора отеля по отзывам и профилю путешественника. AI-анализ отзывов (Groq), mock price engine, персонализированный scoring.
+
+## Production
+
+- **Фронт:** [mybesthotel.vercel.app](https://mybesthotel.vercel.app)
+- **Бэкенд:** [mybesthotel.onrender.com](https://mybesthotel.onrender.com)
+- **Профиль:** сохраняется в PostgreSQL на Render, доступен с любого устройства
 
 ## Запуск локально
 
@@ -10,6 +16,10 @@
 
 > Backend и frontend запускаются в разных терминалах. Backend — из корня `MyBestHotel`, иначе `ModuleNotFoundError: No module named 'backend'`.
 
+Для локальной разработки без PostgreSQL профиль сохраняется в памяти backend и в localStorage браузера.
+
 ## Деплой
 
-См. [DEPLOY.md](DEPLOY.md) — Render, Railway, Vercel. Проект проверен на Vercel.
+- [DEPLOY.md](DEPLOY.md) — обзор (Render, Vercel)
+- [RENDER-INSTRUCTIONS.md](RENDER-INSTRUCTIONS.md) — пошаговая инструкция Render + PostgreSQL
+- [ARCHITECTURE.md](ARCHITECTURE.md) — архитектура системы
