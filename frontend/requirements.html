@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+    <title>Требования к гостинице — My Best Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+</head>
+<body x-data="requirementsApp()" x-init="init()">
+    <header class="header">
+        <a href="index.html" class="header-back">← Поиск</a>
+        <h1>My Best Hotel</h1>
+        <p class="tagline">Требования к гостинице</p>
+    </header>
+
+    <main class="main">
+        <section class="card">
+            <h2>Требования к гостинице</h2>
+            <div class="form">
+                <div class="form-row">
+                    <label for="profile-trip-type">
+                        Тип поездки
+                        <select id="profile-trip-type" name="trip_type" autocomplete="off" x-model="profile.trip_type">
+                            <option value="leisure">Отдых</option>
+                            <option value="business">Бизнес</option>
+                            <option value="family">Семья</option>
+                            <option value="group">Группа</option>
+                        </select>
+                    </label>
+                    <label for="profile-comfort">
+                        Уровень комфорта
+                        <select id="profile-comfort" name="comfort_level" autocomplete="off" x-model="profile.comfort_level">
+                            <option value="budget">Бюджет</option>
+                            <option value="comfort">Комфорт</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label for="profile-budget-min">Бюджет мин (€/ночь) <input id="profile-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_min" placeholder="—" /></label>
+                    <label for="profile-budget-max">Бюджет макс (€/ночь) <input id="profile-budget-max" name="budget_max" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_max" placeholder="—" /></label>
+                </div>
+                <div class="form-row">
+                    <label><input id="profile-with-car" name="with_car" type="checkbox" autocomplete="off" x-model="profile.with_car" /> С машиной</label>
+                    <label><input id="profile-with-pets" name="with_pets" type="checkbox" autocomplete="off" x-model="profile.with_pets" /> С питомцами</label>
+                </div>
+                <p class="form-hint">Темы: cleanliness, location, noise, internet, staff, parking, safety — сохраняются в профиле.</p>
+                <div class="profile-actions">
+                    <button type="button" class="btn btn-primary" @click="saveProfile()">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" @click="exportProfile()">Экспорт JSON</button>
+                    <label class="btn btn-secondary">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/profile.js"></script>
+    <script>
+      function requirementsApp() {
+        return {
+          profile: defaultProfile(),
+          init() {
+            this.profile = loadProfile();
+          },
+          saveProfile() {
+            saveProfile(this.profile);
+            alert("Требования сохранены.");
+          },
+          exportProfile() {
+            const json = exportProfileJSON(this.profile);
+            const blob = new Blob([json], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "mybesthotel-profile.json";
+            a.click();
+            URL.revokeObjectURL(a.href);
+          },
+          importProfile(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              const next = importProfileJSON(reader.result);
+              if (next) {
+                this.profile = next;
+                alert("Требования загружены.");
+              } else {
+                alert("Неверный JSON.");
+              }
+            };
+            reader.readAsText(file);
+            event.target.value = "";
+          },
+        };
+      }
+    </script>
+</body>
+</html>

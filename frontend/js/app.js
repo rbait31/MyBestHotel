@@ -119,37 +119,5 @@ function app() {
       }
     },
 
-    saveProfile() {
-      saveProfile(this.profile);
-      this.error = "";
-      alert("Профиль сохранён в браузере.");
-    },
-
-    exportProfile() {
-      const json = exportProfileJSON(this.profile);
-      const blob = new Blob([json], { type: "application/json" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "mybesthotel-profile.json";
-      a.click();
-      URL.revokeObjectURL(a.href);
-    },
-
-    importProfile(event) {
-      const file = event.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const next = importProfileJSON(reader.result);
-        if (next) {
-          this.profile = next;
-          alert("Профиль загружен.");
-        } else {
-          alert("Неверный JSON.");
-        }
-      };
-      reader.readAsText(file);
-      event.target.value = "";
-    },
   };
 }

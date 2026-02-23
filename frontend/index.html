@@ -11,6 +11,10 @@
 </head>
 <body x-data="app()" x-init="init()">
     <header class="header">
+        <a href="requirements.html" class="header-settings" title="Требования к гостинице">
+            <svg class="icon-gear" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z"/></svg>
+            <span>Требования к гостинице</span>
+        </a>
         <h1>My Best Hotel</h1>
         <p class="tagline">Выбор отеля по отзывам и вашему профилю</p>
     </header>
@@ -49,45 +53,6 @@
                 <p x-show="error === 'Введите все данные!'" class="form-hint form-hint-error" x-text="'Введите все данные!'"></p>
                 <button type="submit" class="btn btn-primary" :disabled="loading">Найти</button>
             </form>
-        </section>
-
-        <!-- Профиль путешественника -->
-        <section class="card profile-section">
-            <h2>Профиль путешественника</h2>
-            <div class="form">
-                <div class="form-row">
-                    <label for="profile-trip-type">
-                        Тип поездки
-                        <select id="profile-trip-type" name="trip_type" autocomplete="off" x-model="profile.trip_type">
-                            <option value="leisure">Отдых</option>
-                            <option value="business">Бизнес</option>
-                            <option value="family">Семья</option>
-                            <option value="group">Группа</option>
-                        </select>
-                    </label>
-                    <label for="profile-comfort">
-                        Уровень комфорта
-                        <select id="profile-comfort" name="comfort_level" autocomplete="off" x-model="profile.comfort_level">
-                            <option value="budget">Бюджет</option>
-                            <option value="comfort">Комфорт</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="form-row">
-                    <label for="profile-budget-min">Бюджет мин (€/ночь) <input id="profile-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_min" placeholder="—" /></label>
-                    <label for="profile-budget-max">Бюджет макс (€/ночь) <input id="profile-budget-max" name="budget_max" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_max" placeholder="—" /></label>
-                </div>
-                <div class="form-row">
-                    <label><input id="profile-with-car" name="with_car" type="checkbox" autocomplete="off" x-model="profile.with_car" /> С машиной</label>
-                    <label><input id="profile-with-pets" name="with_pets" type="checkbox" autocomplete="off" x-model="profile.with_pets" /> С питомцами</label>
-                </div>
-                <p class="form-hint">Темы: cleanliness, location, noise, internet, staff, parking, safety — сохраняются в профиле.</p>
-                <div class="profile-actions">
-                    <button type="button" class="btn btn-secondary" @click="saveProfile()">Сохранить профиль</button>
-                    <button type="button" class="btn btn-secondary" @click="exportProfile()">Экспорт JSON</button>
-                    <label class="btn btn-secondary">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
-                </div>
-            </div>
         </section>
 
         <!-- Сообщения -->
