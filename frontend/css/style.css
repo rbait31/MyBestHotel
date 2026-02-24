@@ -298,21 +298,19 @@ input.field-invalid:focus {
 
 .btn.btn-json,
 label.btn.btn-json {
-  min-width: 9.5rem;
-  max-width: 9.5rem;
-  width: 9.5rem;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.8rem;
-  text-align: center;
-  box-sizing: border-box;
-  flex: 0 0 9.5rem;
-}
-
-.profile-actions .btn.btn-json,
-.profile-actions label.btn.btn-json {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 9.5rem;
+  max-width: 9.5rem;
+  width: 9.5rem;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  text-align: center;
+  box-sizing: border-box;
+  flex: 0 0 9.5rem;
 }
 
 .btn {
