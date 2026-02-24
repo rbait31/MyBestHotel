@@ -219,7 +219,7 @@ select.field-auto {
   flex: 0 0 1.5rem;
   text-align: right;
   font-weight: 500;
-  color: var(--text);
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
