@@ -25,8 +25,8 @@
                     <label><input type="checkbox" :checked="profile.trip_type === 'business'" @change="profile.trip_type = $event.target.checked ? 'business' : 'leisure'" /> Бизнес</label>
                 </div>
                 <div class="form-row">
-                    <label for="profile-budget-min">Бюджет мин (€/ночь) <input id="profile-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_min" placeholder="—" /></label>
-                    <label for="profile-budget-max">Бюджет макс (€/ночь) <input id="profile-budget-max" name="budget_max" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_max" placeholder="—" /></label>
+                    <label for="profile-budget-min">Цена мин (€/ночь) <input id="profile-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_min" placeholder="—" /></label>
+                    <label for="profile-budget-max">Цена макс (€/ночь) <input id="profile-budget-max" name="budget_max" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_max" placeholder="—" /></label>
                 </div>
                 <div class="form-row">
                     <label><input id="profile-with-car" name="with_car" type="checkbox" autocomplete="off" x-model="profile.with_car" /> С машиной</label>
