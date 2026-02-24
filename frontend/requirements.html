@@ -45,6 +45,49 @@
                     <label><input id="profile-with-car" name="with_car" type="checkbox" autocomplete="off" x-model="profile.with_car" /> С машиной</label>
                     <label><input id="profile-with-pets" name="with_pets" type="checkbox" autocomplete="off" x-model="profile.with_pets" /> С питомцами</label>
                 </div>
+
+                <h3 class="requirements-section">1. Предпочтения (положительные факторы)</h3>
+
+                <p class="form-hint form-hint-sub">1.1 Важность (0–5)</p>
+                <div class="slider-grid">
+                    <label class="slider-label"><span>Близость к центру города</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_center" class="slider" /><span x-text="profile.preference_center ?? 3"></span></label>
+                    <label class="slider-label"><span>Чистота</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_cleanliness" class="slider" /><span x-text="profile.preference_cleanliness ?? 3"></span></label>
+                    <label class="slider-label"><span>Тишина</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_quiet" class="slider" /><span x-text="profile.preference_quiet ?? 3"></span></label>
+                    <label class="slider-label"><span>Wi-Fi</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_wifi" class="slider" /><span x-text="profile.preference_wifi ?? 3"></span></label>
+                    <label class="slider-label"><span>Близость к природе/паркам</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_nature" class="slider" /><span x-text="profile.preference_nature ?? 3"></span></label>
+                </div>
+                <div class="form-row">
+                    <input type="text" class="input-stub" placeholder="Введи свое" disabled title="Будет в следующей версии" />
+                </div>
+
+                <p class="form-hint form-hint-sub">1.2 Анкета</p>
+                <div class="form-row form-row-wrap">
+                    <label><input type="checkbox" x-model="profile.breakfast_included" /> Завтрак включён</label>
+                    <label><input type="checkbox" x-model="profile.with_car" /> С автомашиной</label>
+                    <label><input type="checkbox" x-model="profile.solo" /> Соло</label>
+                    <label><input type="checkbox" x-model="profile.couple" /> Пара</label>
+                    <label><input type="checkbox" x-model="profile.family" /> Семья</label>
+                    <label><input type="checkbox" x-model="profile.group" /> Группа</label>
+                    <label><input type="checkbox" x-model="profile.with_pets" /> С животными</label>
+                </div>
+                <div class="form-row">
+                    <input type="text" class="input-stub" placeholder="Введи свое" disabled title="Будет в следующей версии" />
+                </div>
+
+                <h3 class="requirements-section">2. Критично (Red Flags)</h3>
+                <div class="form-row form-row-wrap">
+                    <label><input type="checkbox" x-model="profile.red_flag_safety" /> Плохая безопасность</label>
+                    <label><input type="checkbox" x-model="profile.red_flag_dirt" /> Грязь</label>
+                    <label><input type="checkbox" x-model="profile.red_flag_noise_night" /> Шум ночью</label>
+                    <label><input type="checkbox" x-model="profile.red_flag_weak_wifi" /> Слабый Wi-Fi</label>
+                    <label><input type="checkbox" x-model="profile.red_flag_no_car_access" /> Сложный доступ без машины</label>
+                    <label><input type="checkbox" x-model="profile.red_flag_insects" /> Насекомые в номере</label>
+                    <label><input type="checkbox" x-model="profile.red_flag_scam" /> Обман/скрытые платежи</label>
+                </div>
+                <div class="form-row">
+                    <input type="text" class="input-stub" placeholder="Введи свое" disabled title="Будет в следующей версии" />
+                </div>
+
                 <p class="form-hint">Темы: cleanliness, location, noise, internet, staff, parking, safety — сохраняются в профиле.</p>
                 <div class="profile-actions">
                     <button type="button" class="btn btn-primary" @click="saveProfile()">Сохранить</button>
@@ -65,7 +108,8 @@
         return {
           profile: defaultProfile(),
           async init() {
-            this.profile = await loadProfile();
+            const loaded = await loadProfile();
+            this.profile = { ...defaultProfile(), ...loaded };
           },
           async saveProfile() {
             const ok = await saveProfile(this.profile);

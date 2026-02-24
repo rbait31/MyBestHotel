@@ -25,6 +25,26 @@ const defaultProfile = () => ({
   with_pets: false,
   comfort_level: "comfort",
   themes: ["cleanliness", "location", "noise", "internet"],
+  // Предпочтения (0–5)
+  preference_center: 3,
+  preference_cleanliness: 3,
+  preference_quiet: 3,
+  preference_wifi: 3,
+  preference_nature: 3,
+  // Анкета
+  breakfast_included: false,
+  solo: false,
+  couple: false,
+  family: false,
+  group: false,
+  // Red Flags (критично)
+  red_flag_safety: false,
+  red_flag_dirt: false,
+  red_flag_noise_night: false,
+  red_flag_weak_wifi: false,
+  red_flag_no_car_access: false,
+  red_flag_insects: false,
+  red_flag_scam: false,
 });
 
 function loadProfileLocal() {
