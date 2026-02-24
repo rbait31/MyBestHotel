@@ -223,6 +223,16 @@ select.field-auto {
   font-size: 0.9rem;
 }
 
+.form-row-stub-checkbox {
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-row-stub-checkbox .checkbox-stub {
+  flex: 0 0 auto;
+  cursor: not-allowed;
+}
+
 .input-stub {
   max-width: 280px;
   padding: 0.5rem 0.6rem;
