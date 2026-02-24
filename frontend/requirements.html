@@ -19,7 +19,7 @@
         <section class="card card-requirements">
             <h2 class="card-title-center">Требования к гостинице</h2>
             <div class="form">
-                <p class="form-hint form-hint-sub">Тип поездки</p>
+                <p class="form-hint form-hint-sub form-label-bold">Тип поездки</p>
                 <div class="form-row form-row-wrap">
                     <label><input type="checkbox" :checked="profile.trip_type === 'leisure'" @change="profile.trip_type = $event.target.checked ? 'leisure' : 'business'" /> Отдых</label>
                     <label><input type="checkbox" :checked="profile.trip_type === 'business'" @change="profile.trip_type = $event.target.checked ? 'business' : 'leisure'" /> Бизнес</label>

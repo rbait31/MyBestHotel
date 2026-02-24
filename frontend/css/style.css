@@ -159,6 +159,10 @@ select.field-auto {
   margin: 0.5rem 0 0.5rem 0;
 }
 
+.form-label-bold {
+  font-weight: bold;
+}
+
 .slider-grid {
   display: flex;
   flex-direction: column;
