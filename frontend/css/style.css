@@ -93,6 +93,11 @@ body {
   color: var(--text);
 }
 
+.card-title-center {
+  text-align: center;
+  font-size: 1.6rem;
+}
+
 .form label {
   display: block;
   margin-bottom: 0.75rem;
