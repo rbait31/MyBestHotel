@@ -19,16 +19,10 @@
         <section class="card">
             <h2>Требования к гостинице</h2>
             <div class="form">
-                <div class="form-row">
-                    <label for="profile-trip-type">
-                        Тип поездки
-                        <select id="profile-trip-type" name="trip_type" autocomplete="off" x-model="profile.trip_type">
-                            <option value="leisure">Отдых</option>
-                            <option value="business">Бизнес</option>
-                            <option value="family">Семья</option>
-                            <option value="group">Группа</option>
-                        </select>
-                    </label>
+                <p class="form-hint form-hint-sub">Тип поездки</p>
+                <div class="form-row form-row-wrap">
+                    <label><input type="checkbox" :checked="profile.trip_type === 'leisure'" @change="profile.trip_type = $event.target.checked ? 'leisure' : 'business'" /> Отдых</label>
+                    <label><input type="checkbox" :checked="profile.trip_type === 'business'" @change="profile.trip_type = $event.target.checked ? 'business' : 'leisure'" /> Бизнес</label>
                 </div>
                 <div class="form-row">
                     <label for="profile-budget-min">Бюджет мин (€/ночь) <input id="profile-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="profile.budget_min" placeholder="—" /></label>
