@@ -82,10 +82,10 @@
                     <div class="profile-actions-left">
                         <button type="button" class="btn btn-primary" @click="saveProfile()">Сохранить</button>
                         <a href="index.html" class="btn btn-secondary profile-back">Вернуться к поиску</a>
-                    </div>
-                    <div class="profile-actions-center">
-                        <button type="button" class="btn btn-secondary btn-json" title="Для тестовых целей" @click="exportProfile()">Экспорт JSON</button>
-                        <label class="btn btn-secondary btn-json" title="Для тестовых целей">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
+                        <div class="profile-actions-json">
+                            <button type="button" class="btn btn-secondary btn-json" title="Для тестовых целей" @click="exportProfile()">Экспорт JSON</button>
+                            <label class="btn btn-secondary btn-json" title="Для тестовых целей">Импорт JSON <input id="profile-import" name="profile_import" type="file" accept=".json" autocomplete="off" @change="importProfile($event)" hidden /></label>
+                        </div>
                     </div>
                 </div>
             </div>

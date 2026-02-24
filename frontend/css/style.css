@@ -286,17 +286,15 @@ input.field-invalid:focus {
   align-items: flex-start;
 }
 
-.profile-actions-center {
+.profile-actions-json {
   display: flex;
-  justify-content: center;
   gap: 0.75rem;
-  flex: 1;
-  min-width: 0;
 }
 
 .profile-actions .profile-back {
   text-decoration: none;
-  color: var(--text);
+  color: var(--primary);
+  font-weight: bold;
 }
 
 .profile-actions .profile-back:hover {
