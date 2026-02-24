@@ -22,7 +22,6 @@ DEFAULT_PROFILE = {
     "budget_max": None,
     "with_car": False,
     "with_pets": False,
-    "comfort_level": "comfort",
     "themes": ["cleanliness", "location", "noise", "internet"],
 }
 

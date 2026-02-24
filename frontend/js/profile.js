@@ -23,7 +23,6 @@ const defaultProfile = () => ({
   budget_max: null,
   with_car: false,
   with_pets: false,
-  comfort_level: "comfort",
   themes: ["cleanliness", "location", "noise", "internet"],
   // Предпочтения (0–5)
   preference_center: 3,

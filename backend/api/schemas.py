@@ -12,7 +12,6 @@ class ProfileSchema(BaseModel):
     budget_max: float | None = Field(default=None, description="Макс бюджет €/ночь")
     with_car: bool = False
     with_pets: bool = False
-    comfort_level: str = Field(default="comfort", description="budget | comfort")
     themes: list[str] = Field(default_factory=list)
 
 

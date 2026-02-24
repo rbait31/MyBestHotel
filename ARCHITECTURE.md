@@ -202,7 +202,6 @@ MyBestHotel/
   "budget_max": 250,
   "with_car": false,
   "with_pets": false,
-  "comfort_level": "comfort",
   "themes": ["noise", "cleanliness", "location", "internet"]
 }
 ```

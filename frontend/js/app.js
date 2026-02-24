@@ -96,7 +96,6 @@ function app() {
             budget_max: this.profile.budget_max,
             with_car: this.profile.with_car,
             with_pets: this.profile.with_pets,
-            comfort_level: this.profile.comfort_level,
             themes: this.profile.themes || [],
           },
         };
