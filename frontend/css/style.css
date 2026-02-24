@@ -298,11 +298,13 @@ input.field-invalid:focus {
 
 .btn.btn-json,
 label.btn.btn-json {
-  min-width: 10rem;
-  width: 10rem;
+  min-width: 8.5rem;
+  max-width: 8.5rem;
+  width: 8.5rem;
   padding: 0.25rem 0.6rem;
   font-size: 0.8rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .profile-actions .btn.btn-json,
