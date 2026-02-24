@@ -163,6 +163,10 @@ select.field-auto {
   font-weight: bold;
 }
 
+.form-label-red {
+  color: var(--error);
+}
+
 .slider-grid {
   display: flex;
   flex-direction: column;
