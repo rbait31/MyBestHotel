@@ -358,7 +358,7 @@ function app() {
           profile: profileForCheck,
         });
         this.checkedHotel = data;
-        document.querySelector(".hotel-check-result")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.querySelector("#check-hotel-result")?.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (e) {
         this.checkHotelError = e.message || "Ошибка запроса";
       } finally {
