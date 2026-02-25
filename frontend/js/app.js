@@ -45,6 +45,9 @@ function app() {
       d.setDate(d.getDate() + 1);
       return d.toISOString().slice(0, 10);
     },
+    get isCheckInToday() {
+      return this.check_in && this.check_in === this.minCheckIn;
+    },
 
     onCityInput(val) {
       this.cityInput = val;
