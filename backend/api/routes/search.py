@@ -71,12 +71,13 @@ def search(body: SearchRequest):
     result = []
     for h in selected:
         reviews = get_reviews_for_hotel(h["id"])
-        ai_metrics = analyze_reviews(reviews, trip_type=trip_type)
+        ai_metrics = analyze_reviews(reviews, trip_type=trip_type, profile=profile)
         scored = score_hotel(
             ai_metrics,
             price_per_night=h["price_per_night"],
             avg_price=avg_price,
             trip_type=trip_type,
+            profile=profile,
         )
         result.append({
             "id": h["id"],

@@ -7,12 +7,32 @@ from pydantic import BaseModel, Field
 
 
 class ProfileSchema(BaseModel):
-    trip_type: str = Field(default="leisure", description="leisure | business | family | group")
+    trip_type: str = Field(default="leisure", description="leisure | business")
     budget_min: float | None = Field(default=None, description="Мин бюджет €/ночь")
     budget_max: float | None = Field(default=None, description="Макс бюджет €/ночь")
     with_car: bool = False
     with_pets: bool = False
     themes: list[str] = Field(default_factory=list)
+    # Предпочтения 0–5 (важность)
+    preference_center: int = Field(default=3, ge=0, le=5)
+    preference_cleanliness: int = Field(default=3, ge=0, le=5)
+    preference_quiet: int = Field(default=3, ge=0, le=5)
+    preference_wifi: int = Field(default=3, ge=0, le=5)
+    preference_nature: int = Field(default=3, ge=0, le=5)
+    # Анкета
+    breakfast_included: bool = False
+    solo: bool = False
+    couple: bool = False
+    family: bool = False
+    group: bool = False
+    # Критично (Red Flags) — избегать отели с этими проблемами
+    red_flag_safety: bool = False
+    red_flag_dirt: bool = False
+    red_flag_noise_night: bool = False
+    red_flag_weak_wifi: bool = False
+    red_flag_no_car_access: bool = False
+    red_flag_insects: bool = False
+    red_flag_scam: bool = False
 
 
 class SearchRequest(BaseModel):

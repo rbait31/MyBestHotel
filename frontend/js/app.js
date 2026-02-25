@@ -90,14 +90,7 @@ function app() {
           country: this.country.trim(),
           check_in: this.check_in,
           check_out: this.check_out,
-          profile: {
-            trip_type: this.profile.trip_type,
-            budget_min: this.profile.budget_min,
-            budget_max: this.profile.budget_max,
-            with_car: this.profile.with_car,
-            with_pets: this.profile.with_pets,
-            themes: this.profile.themes || [],
-          },
+          profile: this.profile,
         };
         const data = await searchWithAI(body);
         this.hotels = data.hotels || [];

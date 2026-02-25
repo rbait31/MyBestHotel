@@ -23,6 +23,23 @@ DEFAULT_PROFILE = {
     "with_car": False,
     "with_pets": False,
     "themes": ["cleanliness", "location", "noise", "internet"],
+    "preference_center": 3,
+    "preference_cleanliness": 3,
+    "preference_quiet": 3,
+    "preference_wifi": 3,
+    "preference_nature": 3,
+    "breakfast_included": False,
+    "solo": False,
+    "couple": False,
+    "family": False,
+    "group": False,
+    "red_flag_safety": False,
+    "red_flag_dirt": False,
+    "red_flag_noise_night": False,
+    "red_flag_weak_wifi": False,
+    "red_flag_no_car_access": False,
+    "red_flag_insects": False,
+    "red_flag_scam": False,
 }
 
 

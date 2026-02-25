@@ -54,13 +54,14 @@ def analyze_one(body: AnalyzeRequest):
             pass
 
     reviews = get_reviews_for_hotel(body.hotel_id)
-    ai_metrics = analyze_reviews(reviews, trip_type=trip_type)
+    ai_metrics = analyze_reviews(reviews, trip_type=trip_type, profile=body.profile)
     avg_price = price_per_night or hotel.get("base_price") or 100
     scored = score_hotel(
         ai_metrics,
         price_per_night=price_per_night,
         avg_price=avg_price,
         trip_type=trip_type,
+        profile=body.profile,
     )
 
     return {

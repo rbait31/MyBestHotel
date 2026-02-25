@@ -20,8 +20,62 @@ If data is insufficient, explicitly say so."""
 GROQ_MODEL = "llama-3.1-8b-instant"
 
 
-def _build_analysis_prompt(reviews_text: str, trip_type: str = "leisure") -> str:
-    return f"""Analyze these hotel reviews. Trip type: {trip_type}.
+def _profile_context(profile) -> str:
+    """Собрать контекст профиля для промпта AI."""
+    if not profile:
+        return "Trip type: leisure."
+    parts = [f"Trip type: {getattr(profile, 'trip_type', None) or 'leisure'}."]
+    prefs = []
+    if getattr(profile, "preference_center", 3) >= 4:
+        prefs.append("city center proximity (very important)")
+    if getattr(profile, "preference_cleanliness", 3) >= 4:
+        prefs.append("cleanliness (very important)")
+    if getattr(profile, "preference_quiet", 3) >= 4:
+        prefs.append("quietness (very important)")
+    if getattr(profile, "preference_wifi", 3) >= 4:
+        prefs.append("Wi-Fi quality (very important)")
+    if getattr(profile, "preference_nature", 3) >= 4:
+        prefs.append("nature/parks proximity (very important)")
+    if prefs:
+        parts.append(f"User priorities: {', '.join(prefs)}.")
+    if getattr(profile, "with_car", False):
+        parts.append("Traveler has a car — parking/access matters.")
+    if getattr(profile, "with_pets", False):
+        parts.append("Traveler has pets — pet-friendly info matters.")
+    if getattr(profile, "breakfast_included", False):
+        parts.append("Breakfast inclusion is important.")
+    group = []
+    if getattr(profile, "solo", False):
+        group.append("solo")
+    if getattr(profile, "couple", False):
+        group.append("couple")
+    if getattr(profile, "family", False):
+        group.append("family")
+    if getattr(profile, "group", False):
+        group.append("group")
+    if group:
+        parts.append(f"Traveler type: {', '.join(group)}.")
+    red_avoid = []
+    rf_map = {
+        "red_flag_safety": "safety/security",
+        "red_flag_dirt": "dirt/cleanliness issues",
+        "red_flag_noise_night": "night noise",
+        "red_flag_weak_wifi": "weak Wi-Fi",
+        "red_flag_no_car_access": "poor access without car",
+        "red_flag_insects": "insects in room",
+        "red_flag_scam": "scam/hidden charges",
+    }
+    for key, label in rf_map.items():
+        if getattr(profile, key, False):
+            red_avoid.append(label)
+    if red_avoid:
+        parts.append(f"CRITICAL: traveler wants to AVOID: {', '.join(red_avoid)}. Detect these in red_flags if present in reviews.")
+    return " ".join(parts)
+
+
+def _build_analysis_prompt(reviews_text: str, trip_type: str = "leisure", profile=None) -> str:
+    ctx = _profile_context(profile) if profile else f"Trip type: {trip_type}."
+    return f"""Analyze these hotel reviews. {ctx}
 
 Reviews:
 ---
@@ -62,6 +116,7 @@ def _parse_ai_response(text: str) -> dict:
 def analyze_reviews(
     reviews: list[dict],
     trip_type: str = "leisure",
+    profile=None,
 ) -> dict:
     """
     Анализ списка отзывов через Groq.
@@ -84,7 +139,7 @@ def analyze_reviews(
             model=GROQ_MODEL,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": _build_analysis_prompt(reviews_text, trip_type)},
+                {"role": "user", "content": _build_analysis_prompt(reviews_text, trip_type, profile)},
             ],
             temperature=0.2,
             max_tokens=800,
