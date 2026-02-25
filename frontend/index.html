@@ -66,10 +66,10 @@
                     </label>
                 </div>
                 <div class="form-row">
-                    <label for="search-checkin">Заезд <input id="search-checkin" name="check_in" type="date" autocomplete="off" x-model="check_in" :class="{ 'field-invalid': invalidFields.check_in }" /></label>
-                    <label for="search-checkout">Выезд <input id="search-checkout" name="check_out" type="date" autocomplete="off" x-model="check_out" :class="{ 'field-invalid': invalidFields.check_out }" /></label>
+                    <label for="search-checkin">Заезд <input id="search-checkin" name="check_in" type="date" autocomplete="off" x-model="check_in" :min="minCheckIn" :class="{ 'field-invalid': invalidFields.check_in }" /></label>
+                    <label for="search-checkout">Выезд <input id="search-checkout" name="check_out" type="date" autocomplete="off" x-model="check_out" :min="minCheckOut" :class="{ 'field-invalid': invalidFields.check_out }" /></label>
                 </div>
-                <p x-show="error === 'Введите все данные!'" class="form-hint form-hint-error" x-text="'Введите все данные!'"></p>
+                <p x-show="error" class="form-hint form-hint-error" x-text="error"></p>
                 <button type="submit" class="btn btn-primary" :disabled="loading">Найти</button>
             </form>
         </section>

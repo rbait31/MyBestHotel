@@ -36,6 +36,16 @@ function app() {
     countryOptions: [],
     countryLocked: false,
 
+    get minCheckIn() {
+      return new Date().toISOString().slice(0, 10);
+    },
+    get minCheckOut() {
+      if (!this.check_in) return this.minCheckIn;
+      const d = new Date(this.check_in + "T12:00:00");
+      d.setDate(d.getDate() + 1);
+      return d.toISOString().slice(0, 10);
+    },
+
     onCityInput(val) {
       this.cityInput = val;
       this.cityDropdownOpen = true;
@@ -107,6 +117,19 @@ function app() {
       }
     },
 
+    validateDates() {
+      const today = new Date().toISOString().slice(0, 10);
+      if (!this.check_in) return { valid: false, error: "Введите дату заезда", invalidCheckIn: true, invalidCheckOut: false };
+      if (!this.check_out) return { valid: false, error: "Введите дату выезда", invalidCheckIn: false, invalidCheckOut: true };
+      if (this.check_in < today) {
+        return { valid: false, error: "Дата заезда не может быть в прошлом", invalidCheckIn: true, invalidCheckOut: false };
+      }
+      if (this.check_out <= this.check_in) {
+        return { valid: false, error: "Дата выезда должна быть позже даты заезда", invalidCheckIn: false, invalidCheckOut: true };
+      }
+      return { valid: true, error: "", invalidCheckIn: false, invalidCheckOut: false };
+    },
+
     async runSearch() {
       this.error = "";
       const validCity = CITIES.some((c) => c.value === this.city);
@@ -114,16 +137,24 @@ function app() {
         this.city = "";
         this.cityInput = this.cityInput.trim();
       }
+      const emptyCity = !validCity || !this.city.trim();
+      const emptyCountry = !this.country.trim();
+      const dateValidation = this.validateDates();
       const empty = {
-        city: !validCity || !this.city.trim(),
-        country: !this.country.trim(),
-        check_in: !this.check_in,
-        check_out: !this.check_out,
+        city: emptyCity,
+        country: emptyCountry,
+        check_in: !this.check_in || dateValidation.invalidCheckIn,
+        check_out: !this.check_out || dateValidation.invalidCheckOut,
       };
       this.invalidFields = empty;
-      const hasEmpty = empty.city || empty.country || empty.check_in || empty.check_out;
-      if (hasEmpty) {
+      if (emptyCity || emptyCountry) {
         this.error = "Введите все данные!";
+        document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      if (!dateValidation.valid) {
+        this.error = dateValidation.error;
+        document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
       this.loading = true;
