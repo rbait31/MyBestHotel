@@ -51,11 +51,6 @@ function app() {
       return this.check_in && this.check_in === this.minCheckIn;
     },
 
-    get showSearchBudget() {
-      const p = this.profile || {};
-      return (p.budget_min != null && p.budget_min > 0) || (p.budget_max != null && p.budget_max > 0);
-    },
-
     getEffectiveBudgetMin() {
       const v = this.searchBudgetMin;
       if (v != null && v !== "" && !isNaN(Number(v))) return Number(v);

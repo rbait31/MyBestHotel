@@ -72,7 +72,7 @@
                     <label for="search-checkin">Заезд <input id="search-checkin" name="check_in" type="date" autocomplete="off" x-model="check_in" :min="minCheckIn" :class="{ 'field-invalid': invalidFields.check_in }" /></label>
                     <label for="search-checkout">Выезд <input id="search-checkout" name="check_out" type="date" autocomplete="off" x-model="check_out" :min="minCheckOut" :class="{ 'field-invalid': invalidFields.check_out }" /></label>
                 </div>
-                <div class="form-row" x-show="showSearchBudget">
+                <div class="form-row">
                     <label for="search-budget-min">Цена мин (€/ночь) <input id="search-budget-min" name="budget_min" type="number" min="0" step="10" autocomplete="off" x-model.number="searchBudgetMin" placeholder="—" /></label>
                     <label for="search-budget-max">Цена макс (€/ночь) <input id="search-budget-max" name="budget_max" type="number" min="0" step="10" autocomplete="off" x-model.number="searchBudgetMax" placeholder="—" /></label>
                 </div>
