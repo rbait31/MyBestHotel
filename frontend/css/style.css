@@ -93,6 +93,66 @@ body {
   min-width: 200px;
 }
 
+.hotel-autocomplete-wrap {
+  position: relative;
+}
+
+.hotel-autocomplete {
+  position: relative;
+}
+
+.hotel-autocomplete input {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 0.25rem;
+}
+
+.hotel-autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-width: 320px;
+  margin-top: 2px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.hotel-autocomplete-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.hotel-autocomplete-item:hover {
+  background: var(--bg);
+}
+
+.hotel-autocomplete-empty {
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.form-hint-hotel {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .check-hotel-section .btn-check-hotel {
   align-self: flex-end;
 }

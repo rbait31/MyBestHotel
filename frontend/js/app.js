@@ -17,6 +17,46 @@ const CITY_TO_MULTIPLE = {};
 /** Все страны для fallback (неизвестный город) */
 const ALL_COUNTRIES = ["France", "Spain"];
 
+/** Отели в системе (3 на город для подсказки). Полный список для autocomplete. */
+const HOTELS = [
+  { id: "hotel_001", name: "Grand Plaza", city: "Paris", searchTerms: ["grand", "plaza", "гранд", "плаза"] },
+  { id: "hotel_002", name: "Cozy Inn", city: "Paris", searchTerms: ["cozy", "inn", "кози"] },
+  { id: "hotel_003", name: "Le Marais Boutique", city: "Paris", searchTerms: ["le", "marais", "boutique", "маре", "бутик"] },
+  { id: "hotel_004", name: "Budget Stay Paris", city: "Paris", searchTerms: ["budget", "stay", "париж"] },
+  { id: "hotel_005", name: "Louvre View Hotel", city: "Paris", searchTerms: ["louvre", "view", "hotel", "лувр"] },
+  { id: "hotel_006", name: "Casa Mediterranea", city: "Barcelona", searchTerms: ["casa", "mediterranea", "каса"] },
+  { id: "hotel_007", name: "Gothic Quarter Inn", city: "Barcelona", searchTerms: ["gothic", "quarter", "inn", "готический"] },
+  { id: "hotel_008", name: "Beach Front Barcelona", city: "Barcelona", searchTerms: ["beach", "front", "барселона"] },
+  { id: "hotel_009", name: "Hostal San Lorenzo", city: "Madrid", searchTerms: ["hostal", "san", "lorenzo", "лоренсо"] },
+  { id: "hotel_010", name: "Hostal Abadia Madrid", city: "Madrid", searchTerms: ["hostal", "abadia", "мадрид"] },
+  { id: "hotel_011", name: "Ibis Styles Madrid Prado", city: "Madrid", searchTerms: ["ibis", "styles", "prado", "прадо"] },
+  { id: "hotel_012", name: "Hostal Oriente", city: "Madrid", searchTerms: ["hostal", "oriente", "ориенте"] },
+  { id: "hotel_013", name: "Motion Chueca Hostel", city: "Madrid", searchTerms: ["motion", "chueca", "hostel"] },
+  { id: "hotel_014", name: "Generator Madrid", city: "Madrid", searchTerms: ["generator", "мадрид"] },
+  { id: "hotel_015", name: "The Hat Madrid", city: "Madrid", searchTerms: ["hat", "мадрид"] },
+  { id: "hotel_016", name: "Hostal Persal", city: "Madrid", searchTerms: ["hostal", "persal"] },
+  { id: "hotel_017", name: "Boutique Apartments in the Heart of Madrid", city: "Madrid", searchTerms: ["boutique", "apartments", "heart", "мадрид"] },
+  { id: "hotel_018", name: "4 Bears Sharehome", city: "Madrid", searchTerms: ["bears", "sharehome"] },
+  { id: "hotel_019", name: "Líbere Madrid Palacio Real", city: "Madrid", searchTerms: ["libere", "palacio", "real"] },
+  { id: "hotel_020", name: "B&B Hotel Madrid Centro Plaza Mayor", city: "Madrid", searchTerms: ["bb", "plaza", "mayor", "майор"] },
+  { id: "hotel_021", name: "DAS CARRETAS", city: "Madrid", searchTerms: ["das", "carretas"] },
+  { id: "hotel_022", name: "Hostal Veracruz – Puerta del Sol", city: "Madrid", searchTerms: ["hostal", "veracruz", "puerta", "sol"] },
+  { id: "hotel_023", name: "Hostal Buenos Aires Gran Via", city: "Madrid", searchTerms: ["hostal", "buenos", "aires", "gran", "via"] },
+  { id: "hotel_024", name: "Hostal Atocha 28", city: "Madrid", searchTerms: ["hostal", "atocha"] },
+  { id: "hotel_025", name: "Hotel Urban", city: "Madrid", searchTerms: ["hotel", "urban"] },
+  { id: "hotel_026", name: "NH Collection Madrid Gran Vía", city: "Madrid", searchTerms: ["nh", "collection", "gran", "via"] },
+  { id: "hotel_027", name: "Hotel Liabeny", city: "Madrid", searchTerms: ["hotel", "liabeny"] },
+  { id: "hotel_028", name: "Catalonia Puerta del Sol", city: "Madrid", searchTerms: ["catalonia", "puerta", "sol"] },
+  { id: "hotel_029", name: "Vincci Soho", city: "Madrid", searchTerms: ["vincci", "soho"] },
+  { id: "hotel_030", name: "Room Mate Alba", city: "Madrid", searchTerms: ["room", "mate", "alba"] },
+];
+
+const HOTEL_HINT_EXAMPLES = {
+  Paris: ["Grand Plaza", "Cozy Inn", "Le Marais Boutique"],
+  Barcelona: ["Casa Mediterranea", "Gothic Quarter Inn", "Beach Front Barcelona"],
+  Madrid: ["Hostal San Lorenzo", "Ibis Styles Madrid Prado", "The Hat Madrid"],
+};
+
 function app() {
   return {
     city: "",
@@ -32,7 +72,10 @@ function app() {
     hotels: [],
     loading: false,
     error: "",
+    checkHotelInput: "",
     checkHotelName: "",
+    hotelSuggestions: [],
+    hotelDropdownOpen: false,
     checkedHotel: null,
     checkHotelLoading: false,
     checkHotelError: "",
@@ -132,6 +175,7 @@ function app() {
       this.searchBudgetMin = this.profile.budget_min ?? null;
       this.searchBudgetMax = this.profile.budget_max ?? null;
       this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
+      this.hotelSuggestions = HOTELS.map((h) => ({ value: h.name, label: h.name, city: h.city }));
       this.$watch("city", (value) => this.onCityChange(value));
       this.onCityChange(this.city);
       try {
@@ -244,10 +288,60 @@ function app() {
       }
     },
 
+    onHotelInput(val) {
+      this.checkHotelInput = val;
+      this.hotelDropdownOpen = true;
+      const q = (val || "").trim().toLowerCase();
+      let list = HOTELS;
+      if (this.city) {
+        list = list.filter((h) => h.city === this.city);
+      }
+      if (!q) {
+        this.hotelSuggestions = list.map((h) => ({ value: h.name, label: h.name, city: h.city }));
+        return;
+      }
+      this.hotelSuggestions = list
+        .filter(
+          (h) =>
+            h.name.toLowerCase().includes(q) ||
+            h.searchTerms.some((t) => t.startsWith(q) || t.includes(q))
+        )
+        .map((h) => ({ value: h.name, label: h.name, city: h.city }));
+    },
+
+    selectHotel(name) {
+      const h = HOTELS.find((x) => x.name === name);
+      if (h) {
+        this.checkHotelInput = h.name;
+        this.checkHotelName = h.name;
+        this.hotelDropdownOpen = false;
+      }
+    },
+
+    onHotelFocus() {
+      this.hotelDropdownOpen = true;
+      let list = HOTELS;
+      if (this.city) list = list.filter((h) => h.city === this.city);
+      this.hotelSuggestions = list.map((h) => ({ value: h.name, label: h.name, city: h.city }));
+    },
+
+    get hotelHintText() {
+      const parts = [];
+      for (const [city, names] of Object.entries(HOTEL_HINT_EXAMPLES)) {
+        parts.push(city + " — " + names.join(", "));
+      }
+      return "Сейчас в системе рассматриваются отели: " + parts.join("; ");
+    },
+
     async runCheckHotel() {
-      const name = (this.checkHotelName || "").trim();
+      const name = (this.checkHotelName || this.checkHotelInput || "").trim();
+      const validHotel = HOTELS.some((h) => h.name === name);
       if (!name) {
         this.checkHotelError = "Введите название отеля";
+        return;
+      }
+      if (!validHotel) {
+        this.checkHotelError = "Выберите отель из списка";
         return;
       }
       this.checkHotelError = "";
@@ -258,7 +352,7 @@ function app() {
         profileForCheck.budget_min = this.getEffectiveBudgetMin();
         profileForCheck.budget_max = this.getEffectiveBudgetMax();
         const data = await checkHotel({
-          hotel_name: name,
+          hotel_name: name.trim(),
           city: this.city || "",
           country: this.country || "",
           profile: profileForCheck,
