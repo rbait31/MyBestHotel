@@ -88,6 +88,10 @@ body {
   color: var(--primary-hover);
 }
 
+.check-hotel-section {
+  margin-top: 2.5rem;
+}
+
 .check-hotel-section .flex-grow {
   flex: 1;
   min-width: 200px;
