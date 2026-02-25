@@ -122,39 +122,37 @@
         <!-- Проверить гостиницу -->
         <section class="card check-hotel-section">
             <h2>Проверить гостиницу</h2>
-            <p class="form-hint form-hint-sub">Введите название отеля — система оценит его по вашим требованиям</p>
-            <div class="form-row">
-                <label for="check-hotel-name" class="flex-grow hotel-autocomplete-wrap">
-                    Название отеля
-                    <div class="hotel-autocomplete" @click.outside="hotelDropdownOpen = false">
-                        <input id="check-hotel-name" type="text" placeholder="Введите название отеля" autocomplete="off"
-                            :value="checkHotelInput"
-                            @input="onHotelInput($event.target.value)"
-                            @focus="onHotelFocus()"
-                            @keydown.enter.prevent="runCheckHotel()"
-                        />
-                        <div class="hotel-autocomplete-dropdown" x-show="hotelDropdownOpen" x-transition x-cloak>
-                            <template x-for="h in hotelSuggestions" :key="h.value">
-                                <button type="button" class="hotel-autocomplete-item"
-                                    @click="selectHotel(h.value)"
-                                    x-text="h.label + (h.city ? ' (' + h.city + ')' : '')">
-                                </button>
-                            </template>
-                            <p x-show="checkHotelInput.length > 0 && hotelSuggestions.length === 0" class="hotel-autocomplete-empty">
-                                Отель не найден. Выберите из списка.
+            <form @submit.prevent="runCheckHotel()" class="form">
+                <div class="form-row">
+                    <label for="check-hotel-name" class="hotel-autocomplete-wrap">
+                        Название отеля
+                        <div class="hotel-autocomplete" @click.outside="hotelDropdownOpen = false">
+                            <input id="check-hotel-name" type="text" placeholder="Введите название отеля" autocomplete="off"
+                                :value="checkHotelInput"
+                                @input="onHotelInput($event.target.value)"
+                                @focus="onHotelFocus()"
+                            />
+                            <div class="hotel-autocomplete-dropdown" x-show="hotelDropdownOpen" x-transition x-cloak>
+                                <template x-for="h in hotelSuggestions" :key="h.value">
+                                    <button type="button" class="hotel-autocomplete-item"
+                                        @click="selectHotel(h.value)"
+                                        x-text="h.label + (h.city ? ' (' + h.city + ')' : '')">
+                                    </button>
+                                </template>
+                                <p x-show="checkHotelInput.length > 0 && hotelSuggestions.length === 0" class="hotel-autocomplete-empty">
+                                    Отель не найден. Выберите из списка ниже.
+                                </p>
+                            </div>
+                            <p class="form-hint form-hint-hotel" x-show="checkHotelInput.length === 1"
+                                x-text="hotelHintText">
                             </p>
                         </div>
-                        <p class="form-hint form-hint-hotel" x-show="checkHotelInput.length === 1"
-                            x-text="hotelHintText">
-                        </p>
-                    </div>
-                </label>
-                <button type="button" class="btn btn-primary btn-check-hotel" @click="runCheckHotel()" :disabled="checkHotelLoading">
-                    Проверить
-                </button>
-            </div>
-            <p x-show="checkHotelError" class="form-hint form-hint-error" x-text="checkHotelError"></p>
-            <div x-show="checkHotelLoading" class="message message-loading">Проверяю отель…</div>
+                    </label>
+                </div>
+                <p x-show="checkHotelError" class="form-hint form-hint-error" x-text="checkHotelError"></p>
+                <button type="submit" class="btn btn-primary" :disabled="checkHotelLoading">Проверить</button>
+            </form>
+            <div x-show="checkHotelLoading" x-transition class="message message-loading" x-cloak>Проверяю отель…</div>
             <div x-show="checkedHotel && !checkHotelLoading" class="hotel-check-result">
                 <h3>Результат проверки</h3>
                 <article class="card hotel-card">
