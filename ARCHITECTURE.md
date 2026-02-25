@@ -39,8 +39,8 @@
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  SCORING ENGINE (Python logic)                                               │
-│  final_score = cleanliness*0.3 + location*0.2 + value*0.2 + comfort*0.2     │
-│                - risk*0.1                                                    │
+│  Веса по предпочтениям профиля (0–5). Штраф за red_flags, отмеченные        │
+│  пользователем. quality = (cleanliness + location + comfort + staff + noise)/5│
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -67,7 +67,9 @@
 1. Пользователь вводит:
    - Город, страна
    - Даты заезда/выезда
-   - Профиль (тип поездки, бюджет, темы интересов) — загружается из API (PostgreSQL) или localStorage
+   - Профиль — загружается из API (PostgreSQL) или localStorage:
+     тип поездки, бюджет, машина, питомцы; предпочтения (центр, чистота, тишина, Wi‑Fi, природа);
+     завтрак, состав (solo/couple/family/group); критичные red flags
 
 2. Frontend → POST /api/search
    {
@@ -83,9 +85,8 @@
    b) Фильтр по бюджету (min-max цена)
    c) Выбор 3–4 отелей в ценовом диапазоне
    d) Загрузка отзывов из reviews.json
-   e) Groq AI → анализ каждого отеля (метрики, риски, плюсы/минусы, consistency)
-   f) Scoring Engine → итоговый score
-   g) Персонализация под профиль (AI или веса формулы)
+   e) Groq AI → анализ каждого отеля с учётом профиля (метрики, риски, плюсы/минусы, consistency)
+   f) Scoring Engine → итоговый score (веса по предпочтениям, штраф за совпадение red_flags)
 
 4. Ответ → список отелей с:
    - price_per_night
@@ -195,16 +196,45 @@ MyBestHotel/
 
 ### 5.3 Профиль путешественника (API / localStorage)
 
+Все поля учитываются при AI-анализе и скоринге.
+
 ```json
 {
-  "trip_type": "business",
-  "budget_min": 100,
+  "trip_type": "leisure",
+  "budget_min": 50,
   "budget_max": 250,
   "with_car": false,
   "with_pets": false,
-  "themes": ["noise", "cleanliness", "location", "internet"]
+  "themes": ["cleanliness", "location", "noise", "internet"],
+  "preference_center": 3,
+  "preference_cleanliness": 3,
+  "preference_quiet": 3,
+  "preference_wifi": 3,
+  "preference_nature": 3,
+  "breakfast_included": false,
+  "solo": false,
+  "couple": false,
+  "family": false,
+  "group": false,
+  "red_flag_safety": false,
+  "red_flag_dirt": false,
+  "red_flag_noise_night": false,
+  "red_flag_weak_wifi": false,
+  "red_flag_no_car_access": false,
+  "red_flag_insects": false,
+  "red_flag_scam": false
 }
 ```
+
+| Поле | Описание |
+|------|----------|
+| trip_type | `leisure` \| `business` |
+| budget_min, budget_max | Фильтр по цене (€/ночь) |
+| with_car, with_pets | Учёт парковки, pet-friendly |
+| preference_* | Важность 0–5 (центр, чистота, тишина, Wi‑Fi, природа) |
+| breakfast_included | Важность завтрака |
+| solo, couple, family, group | Состав поездки |
+| red_flag_* | Критично: избегать отели с этими проблемами |
 
 ### 5.4 Ответ поиска (упрощённо)
 
@@ -257,10 +287,16 @@ price = base_price × season_multiplier × weekend_multiplier × demand_factor �
 **Промпт-задачи:**
 
 1. **Извлечение метрик:** cleanliness, noise, comfort, location, staff (0–10)
-2. **Risk detection:** наличие unsafe, dirty, scam, noise all night, broken
+2. **Risk detection:** red_flags (unsafe, dirty, scam, noise, weak wifi и т.д.)
 3. **Плюсы/минусы:** список из отзывов
 4. **Consistency:** согласованность отзывов (высокая/низкая)
 5. **Verdict:** краткий вывод с учётом профиля путешественника
+
+**Учёт профиля в промпте:**
+- Приоритеты (предпочтения 4–5): центр, чистота, тишина, Wi‑Fi, природа
+- with_car / with_pets: парковка, pet-friendly
+- breakfast_included, solo/couple/family/group
+- **Критично:** red_flag_* — AI особо ищет и помечает в red_flags совпадения
 
 **Модель:** `llama-3.1-8b-instant` (быстро, в рамках бесплатного лимита).
 
@@ -268,17 +304,25 @@ price = base_price × season_multiplier × weekend_multiplier × demand_factor �
 
 ## 8. Scoring Engine
 
-```python
-final_score = (
-    cleanliness * 0.3 +
-    location * 0.2 +
-    value_score * 0.2 +
-    comfort * 0.2 -
-    risk_weight * 0.1
-)
-```
+**Метрики качества:** cleanliness, location, comfort, staff, noise (0–10)
 
-Веса могут подстраиваться под `trip_type` (бизнес → меньше noise_weight, больше location).
+**Веса по предпочтениям профиля (0–5):**
+- preference_cleanliness → w_cleanliness
+- preference_center, preference_nature → w_location
+- preference_wifi → w_comfort
+- preference_quiet → w_noise
+- staff — базовый вес (без ползунка на странице)
+
+**Дополнительно:**
+- `trip_type: business` — усиление location, ослабление comfort
+- `family` / `group` — усиление cleanliness, comfort
+
+**Штраф за red_flags:** если пользователь отметил `red_flag_*` (напр. dirt) и отель имеет соответствующий флаг в AI-ответе — `risk_weight` увеличивается, `final_score` снижается.
+
+```python
+# quality_score = (cleanliness + location + comfort + staff + noise) / 5
+# final_score = взвешенная сумма метрик + value - risk (с учётом штрафа)
+```
 
 ---
 
