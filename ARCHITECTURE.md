@@ -207,11 +207,11 @@ MyBestHotel/
   "with_pets": false,
   "themes": ["cleanliness", "location", "noise", "internet"],
   "preference_center": 3,
+  "preference_breakfast": 3,
   "preference_cleanliness": 3,
   "preference_quiet": 3,
   "preference_wifi": 3,
   "preference_nature": 3,
-  "breakfast_included": false,
   "solo": false,
   "couple": false,
   "family": false,
@@ -231,8 +231,7 @@ MyBestHotel/
 | trip_type | `leisure` \| `business` |
 | budget_min, budget_max | Фильтр по цене (€/ночь) |
 | with_car, with_pets | Учёт парковки, pet-friendly |
-| preference_* | Важность 0–5 (центр, чистота, тишина, Wi‑Fi, природа) |
-| breakfast_included | Важность завтрака |
+| preference_* | Важность 0–5 (центр, завтрак, чистота, тишина, Wi‑Fi, природа) |
 | solo, couple, family, group | Состав поездки |
 | red_flag_* | Критично: избегать отели с этими проблемами |
 
@@ -295,7 +294,7 @@ price = base_price × season_multiplier × weekend_multiplier × demand_factor �
 **Учёт профиля в промпте:**
 - Приоритеты (предпочтения 4–5): центр, чистота, тишина, Wi‑Fi, природа
 - with_car / with_pets: парковка, pet-friendly
-- breakfast_included, solo/couple/family/group
+- preference_breakfast (0–5), solo/couple/family/group
 - **Критично:** red_flag_* — AI особо ищет и помечает в red_flags совпадения
 
 **Модель:** `llama-3.1-8b-instant` (быстро, в рамках бесплатного лимита).

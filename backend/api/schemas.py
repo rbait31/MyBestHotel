@@ -15,12 +15,12 @@ class ProfileSchema(BaseModel):
     themes: list[str] = Field(default_factory=list)
     # Предпочтения 0–5 (важность)
     preference_center: int = Field(default=3, ge=0, le=5)
+    preference_breakfast: int = Field(default=3, ge=0, le=5)
     preference_cleanliness: int = Field(default=3, ge=0, le=5)
     preference_quiet: int = Field(default=3, ge=0, le=5)
     preference_wifi: int = Field(default=3, ge=0, le=5)
     preference_nature: int = Field(default=3, ge=0, le=5)
     # Анкета
-    breakfast_included: bool = False
     solo: bool = False
     couple: bool = False
     family: bool = False

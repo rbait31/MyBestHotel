@@ -36,14 +36,14 @@ def _profile_context(profile) -> str:
         prefs.append("Wi-Fi quality (very important)")
     if getattr(profile, "preference_nature", 3) >= 4:
         prefs.append("nature/parks proximity (very important)")
+    if getattr(profile, "preference_breakfast", 3) >= 4:
+        prefs.append("breakfast inclusion (very important)")
     if prefs:
         parts.append(f"User priorities: {', '.join(prefs)}.")
     if getattr(profile, "with_car", False):
         parts.append("Traveler has a car — parking/access matters.")
     if getattr(profile, "with_pets", False):
         parts.append("Traveler has pets — pet-friendly info matters.")
-    if getattr(profile, "breakfast_included", False):
-        parts.append("Breakfast inclusion is important.")
     group = []
     if getattr(profile, "solo", False):
         group.append("solo")

@@ -26,12 +26,12 @@ const defaultProfile = () => ({
   themes: ["cleanliness", "location", "noise", "internet"],
   // Предпочтения (0–5)
   preference_center: 3,
+  preference_breakfast: 3,
   preference_cleanliness: 3,
   preference_quiet: 3,
   preference_wifi: 3,
   preference_nature: 3,
   // Анкета
-  breakfast_included: false,
   solo: false,
   couple: false,
   family: false,
@@ -46,12 +46,20 @@ const defaultProfile = () => ({
   red_flag_scam: false,
 });
 
+function migrateProfile(p) {
+  const m = { ...defaultProfile(), ...p };
+  if ("breakfast_included" in p && typeof p.breakfast_included === "boolean" && !("preference_breakfast" in p)) {
+    m.preference_breakfast = p.breakfast_included ? 5 : 0;
+  }
+  return m;
+}
+
 function loadProfileLocal() {
   try {
     const raw = localStorage.getItem(PROFILE_KEY);
     if (!raw) return defaultProfile();
     const p = JSON.parse(raw);
-    return { ...defaultProfile(), ...p };
+    return migrateProfile(p);
   } catch {
     return defaultProfile();
   }
@@ -67,7 +75,7 @@ async function loadProfileFromAPI() {
   const r = await fetch(`${base}/api/profile?user_id=${encodeURIComponent(userId)}`, { method: "GET" });
   if (!r.ok) return null;
   const data = await r.json();
-  return data?.profile ? { ...defaultProfile(), ...data.profile } : null;
+  return data?.profile ? migrateProfile(data.profile) : null;
 }
 
 async function saveProfileToAPI(profile) {
@@ -118,7 +126,7 @@ async function importProfileJSON(jsonString) {
   try {
     const p = JSON.parse(jsonString);
     if (typeof p !== "object" || p === null) return null;
-    const merged = { ...defaultProfile(), ...p };
+    const merged = migrateProfile(p);
     await saveProfile(merged);
     return merged;
   } catch {

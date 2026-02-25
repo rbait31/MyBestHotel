@@ -49,7 +49,7 @@
 - [x] Проверка полного сценария в проде ✅
 
 ## Реализовано (расширение)
-- [x] Интеграция полного профиля с AI и scoring: предпочтения, red flags, with_car, with_pets, breakfast_included, solo/couple/family/group
+- [x] Интеграция полного профиля с AI и scoring: предпочтения (в т.ч. завтрак 0–5), red flags, with_car, with_pets, solo/couple/family/group
 - [x] Веса скоринга по предпочтениям пользователя (0–5)
 - [x] Штраф за совпадение red_flags отеля с критичными для пользователя
 

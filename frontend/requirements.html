@@ -38,6 +38,7 @@
                 <p class="form-hint form-hint-sub">Важность от 0 (не важно) до 5 (очень важно)</p>
                 <div class="slider-grid">
                     <label class="slider-label"><span>Близость к центру города</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_center" class="slider" /><span x-text="profile.preference_center ?? 3"></span></label>
+                    <label class="slider-label"><span>Завтрак включён</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_breakfast" class="slider" /><span x-text="profile.preference_breakfast ?? 3"></span></label>
                     <label class="slider-label"><span>Чистота</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_cleanliness" class="slider" /><span x-text="profile.preference_cleanliness ?? 3"></span></label>
                     <label class="slider-label"><span>Тишина</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_quiet" class="slider" /><span x-text="profile.preference_quiet ?? 3"></span></label>
                     <label class="slider-label"><span>Wi-Fi</span><input type="range" min="0" max="5" step="1" x-model.number="profile.preference_wifi" class="slider" /><span x-text="profile.preference_wifi ?? 3"></span></label>
@@ -51,7 +52,6 @@
 
                 <p class="form-hint form-hint-sub form-label-bold">Дополнительные данные</p>
                 <div class="form-row form-row-wrap">
-                    <label><input type="checkbox" x-model="profile.breakfast_included" /> Завтрак включён</label>
                     <label><input type="checkbox" x-model="profile.solo" /> Соло</label>
                     <label><input type="checkbox" x-model="profile.couple" /> Пара</label>
                     <label><input type="checkbox" x-model="profile.family" /> Семья</label>
