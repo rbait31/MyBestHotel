@@ -62,6 +62,19 @@ body {
   flex-shrink: 0;
 }
 
+.profile-search-hint {
+  margin: 0 0 1rem 0;
+  padding: 0.6rem 0.75rem;
+  background: #e8f5e9;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.profile-search-hint strong {
+  color: var(--primary);
+}
+
 .header h1 {
   margin: 0 0 0.25rem 0;
   font-size: 1.5rem;

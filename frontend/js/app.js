@@ -49,6 +49,35 @@ function app() {
       return this.check_in && this.check_in === this.minCheckIn;
     },
 
+    get profileSummary() {
+      const p = this.profile || {};
+      const parts = [];
+      const tripLabels = { leisure: "Отдых", business: "Бизнес" };
+      parts.push(tripLabels[p.trip_type] || "Отдых");
+      if (p.budget_min != null && p.budget_min > 0) {
+        parts.push("бюджет от €" + p.budget_min + "/ночь");
+      }
+      if (p.budget_max != null && p.budget_max > 0) {
+        parts.push("до €" + p.budget_max + "/ночь");
+      }
+      const prefLabels = {
+        preference_center: "центр",
+        preference_breakfast: "завтрак",
+        preference_cleanliness: "чистота",
+        preference_quiet: "тишина",
+        preference_wifi: "Wi‑Fi",
+        preference_nature: "природа",
+      };
+      const important = [];
+      for (const [key, label] of Object.entries(prefLabels)) {
+        if ((p[key] ?? 3) >= 4) important.push(label);
+      }
+      if (important.length) {
+        parts.push("важно: " + important.join(", "));
+      }
+      return parts.length ? parts.join(" · ") : null;
+    },
+
     onCityInput(val) {
       this.cityInput = val;
       this.cityDropdownOpen = true;

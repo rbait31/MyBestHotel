@@ -28,6 +28,9 @@
                     <span>Требования к гостинице</span>
                 </a>
             </div>
+            <p x-show="profileSummary" class="profile-search-hint">
+                <strong>Поиск с учётом ваших требований:</strong> <span x-text="profileSummary"></span>
+            </p>
             <form @submit.prevent="runSearch()" class="form">
                 <div class="form-row">
                     <label for="search-city" class="city-autocomplete-wrap">
