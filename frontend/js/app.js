@@ -26,6 +26,8 @@ function app() {
     country: "",
     check_in: "",
     check_out: "",
+    searchBudgetMin: null,
+    searchBudgetMax: null,
     profile: defaultProfile(),
     hotels: [],
     loading: false,
@@ -49,16 +51,34 @@ function app() {
       return this.check_in && this.check_in === this.minCheckIn;
     },
 
+    get showSearchBudget() {
+      const p = this.profile || {};
+      return (p.budget_min != null && p.budget_min > 0) || (p.budget_max != null && p.budget_max > 0);
+    },
+
+    getEffectiveBudgetMin() {
+      const v = this.searchBudgetMin;
+      if (v != null && v !== "" && !isNaN(Number(v))) return Number(v);
+      return this.profile?.budget_min ?? null;
+    },
+    getEffectiveBudgetMax() {
+      const v = this.searchBudgetMax;
+      if (v != null && v !== "" && !isNaN(Number(v))) return Number(v);
+      return this.profile?.budget_max ?? null;
+    },
+
     get profileSummary() {
       const p = this.profile || {};
       const parts = [];
       const tripLabels = { leisure: "Отдых", business: "Бизнес" };
       parts.push(tripLabels[p.trip_type] || "Отдых");
-      if (p.budget_min != null && p.budget_min > 0) {
-        parts.push("бюджет от €" + p.budget_min + "/ночь");
+      const effMin = this.getEffectiveBudgetMin();
+      const effMax = this.getEffectiveBudgetMax();
+      if (effMin != null && effMin > 0) {
+        parts.push("бюджет от €" + effMin + "/ночь");
       }
-      if (p.budget_max != null && p.budget_max > 0) {
-        parts.push("до €" + p.budget_max + "/ночь");
+      if (effMax != null && effMax > 0) {
+        parts.push("до €" + effMax + "/ночь");
       }
       const prefLabels = {
         preference_center: "центр",
@@ -110,6 +130,8 @@ function app() {
 
     async init() {
       this.profile = await loadProfile();
+      this.searchBudgetMin = this.profile.budget_min ?? null;
+      this.searchBudgetMax = this.profile.budget_max ?? null;
       this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
       this.$watch("city", (value) => this.onCityChange(value));
       this.onCityChange(this.city);
@@ -192,12 +214,17 @@ function app() {
       this.loading = true;
       this.lastSearched = false;
       try {
+        const profileForSearch = { ...this.profile };
+        const effMin = this.getEffectiveBudgetMin();
+        const effMax = this.getEffectiveBudgetMax();
+        profileForSearch.budget_min = effMin;
+        profileForSearch.budget_max = effMax;
         const body = {
           city: this.city.trim(),
           country: this.country.trim(),
           check_in: this.check_in,
           check_out: this.check_out,
-          profile: this.profile,
+          profile: profileForSearch,
         };
         const data = await searchWithAI(body);
         this.hotels = data.hotels || [];
