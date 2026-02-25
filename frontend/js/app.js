@@ -70,7 +70,7 @@ function app() {
       const effMin = this.getEffectiveBudgetMin();
       const effMax = this.getEffectiveBudgetMax();
       if (effMin != null && effMin > 0) {
-        parts.push("бюджет от €" + effMin + "/ночь");
+        parts.push("от €" + effMin + "/ночь");
       }
       if (effMax != null && effMax > 0) {
         parts.push("до €" + effMax + "/ночь");

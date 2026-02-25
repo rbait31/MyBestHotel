@@ -63,7 +63,11 @@ body {
 }
 
 .profile-search-hint {
-  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem 0;
   padding: 0.6rem 0.75rem;
   background: #e8f5e9;
   border-radius: 6px;
@@ -73,6 +77,15 @@ body {
 
 .profile-search-hint strong {
   color: var(--primary);
+}
+
+.profile-search-hint-gear {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.profile-search-hint-gear:hover {
+  color: var(--primary-hover);
 }
 
 .header h1 {
