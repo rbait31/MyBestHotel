@@ -118,6 +118,44 @@
         <section x-show="!loading && hotels.length === 0 && lastSearched" class="message">
             Отелей не найдено по заданным параметрам. Проверьте город, страну и даты.
         </section>
+
+        <!-- Проверить гостиницу -->
+        <section class="card check-hotel-section">
+            <h2>Проверить гостиницу</h2>
+            <p class="form-hint form-hint-sub">Введите название отеля — система оценит его по вашим требованиям</p>
+            <div class="form-row">
+                <label for="check-hotel-name" class="flex-grow">
+                    Название отеля
+                    <input id="check-hotel-name" type="text" placeholder="Например: Grand Plaza" autocomplete="off"
+                        x-model="checkHotelName"
+                        @keydown.enter.prevent="runCheckHotel()"
+                    />
+                </label>
+                <button type="button" class="btn btn-primary btn-check-hotel" @click="runCheckHotel()" :disabled="checkHotelLoading">
+                    Проверить
+                </button>
+            </div>
+            <p x-show="checkHotelError" class="form-hint form-hint-error" x-text="checkHotelError"></p>
+            <div x-show="checkHotelLoading" class="message message-loading">Проверяю отель…</div>
+            <div x-show="checkedHotel && !checkHotelLoading" class="hotel-check-result">
+                <h3>Результат проверки</h3>
+                <article class="card hotel-card">
+                    <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
+                    <p class="hotel-meta"><span x-text="checkedHotel.district"></span> · <span x-text="checkedHotel.city"></span> · Рейтинг <span x-text="checkedHotel.rating"></span></p>
+                    <template x-if="checkedHotel.price_per_night != null">
+                        <p class="hotel-price"><strong x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></strong> / ночь</p>
+                    </template>
+                    <p class="hotel-location" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
+                    <div class="hotel-extra" x-show="checkedHotel.quality_score != null">
+                        <p><strong>Итоговая оценка:</strong> <span x-text="checkedHotel.final_score"></span>/10 · Оценка: <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
+                        <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
+                        <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>
+                        <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>
+                        <p class="verdict" x-show="checkedHotel.verdict" x-text="checkedHotel.verdict"></p>
+                    </div>
+                </article>
+            </div>
+        </section>
     </main>
 
     <script src="js/config.js"></script>

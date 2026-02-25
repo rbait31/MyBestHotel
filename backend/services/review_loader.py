@@ -54,6 +54,26 @@ def get_hotel_by_id(hotel_id: str) -> dict | None:
     return None
 
 
+def get_hotel_by_name(
+    name: str,
+    city: str | None = None,
+    country: str | None = None,
+) -> dict | None:
+    """
+    Найти отель по названию (частичное совпадение, без учёта регистра).
+    При указании city/country — фильтр по локации.
+    """
+    if not name or not name.strip():
+        return None
+    hotels = get_hotels_by_location(city=city, country=country) if (city or country) else load_hotels()
+    q = name.strip().lower()
+    for h in hotels:
+        hotel_name = (h.get("name") or "").lower()
+        if q in hotel_name or hotel_name in q:
+            return h
+    return None
+
+
 def get_reviews_for_hotel(hotel_id: str) -> list[dict]:
     """Получить отзывы по hotel_id."""
     reviews = load_reviews()

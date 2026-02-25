@@ -48,3 +48,10 @@ class AnalyzeRequest(BaseModel):
     check_in: str | None = Field(default=None)
     check_out: str | None = Field(default=None)
     profile: ProfileSchema | None = Field(default=None)
+
+
+class CheckHotelRequest(BaseModel):
+    hotel_name: str = Field(..., description="Название отеля для проверки")
+    city: str = Field(default="", description="Город (опционально, для уточнения)")
+    country: str = Field(default="", description="Страна (опционально)")
+    profile: ProfileSchema | None = Field(default=None)

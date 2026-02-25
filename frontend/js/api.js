@@ -34,6 +34,22 @@ async function searchWithAI(body) {
   return res.json();
 }
 
+/**
+ * Проверить гостиницу по названию — оценка по профилю (POST /api/check-hotel).
+ */
+async function checkHotel(body) {
+  const res = await fetch(`${API_BASE}/api/check-hotel`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || "Ошибка запроса");
+  }
+  return res.json();
+}
+
 async function getHotelDetails(hotelId, checkIn, checkOut) {
   const q = new URLSearchParams();
   if (checkIn) q.set("check_in", checkIn);

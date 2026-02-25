@@ -1,12 +1,13 @@
 """
-POST /api/analyze — анализ одного отеля (для выбранного пользователем).
+POST /api/analyze — анализ одного отеля по ID.
+POST /api/check-hotel — оценка отеля по названию для профиля пользователя.
 """
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
 
-from backend.api.schemas import AnalyzeRequest
-from backend.services.review_loader import get_hotel_by_id, get_reviews_for_hotel
+from backend.api.schemas import AnalyzeRequest, CheckHotelRequest
+from backend.services.review_loader import get_hotel_by_id, get_hotel_by_name, get_reviews_for_hotel
 from backend.services.price_engine import calculate_price_for_stay, calculate_price_per_night
 from backend.services.ai_analysis import analyze_reviews
 from backend.services.scoring import score_hotel
@@ -74,6 +75,56 @@ def analyze_one(body: AnalyzeRequest):
         "location_score": hotel.get("location_score"),
         "price_per_night": price_per_night,
         "reviews_count": len(reviews),
+        "quality_score": scored.get("quality_score"),
+        "value_for_money": scored.get("value_for_money"),
+        "final_score": scored.get("final_score"),
+        "red_flags": scored.get("red_flags", []),
+        "risks": {"risk_weight": scored.get("risk_weight")},
+        "pros": scored.get("pros", []),
+        "cons": scored.get("cons", []),
+        "consistency_score": scored.get("consistency_score"),
+        "verdict": scored.get("verdict"),
+    }
+
+
+@router.post("/check-hotel")
+def check_hotel(body: CheckHotelRequest):
+    """
+    Оценка отеля по названию: найти отель и выдать карточку с анализом по профилю.
+    """
+    hotel = get_hotel_by_name(
+        name=body.hotel_name.strip(),
+        city=body.city.strip() or None,
+        country=body.country.strip() or None,
+    )
+    if not hotel:
+        raise HTTPException(status_code=404, detail="Отель не найден. Проверьте название, город и страну.")
+
+    trip_type = "leisure"
+    profile = body.profile
+    if profile:
+        trip_type = getattr(profile, "trip_type", None) or "leisure"
+
+    reviews = get_reviews_for_hotel(hotel["id"])
+    ai_metrics = analyze_reviews(reviews, trip_type=trip_type, profile=profile)
+    price_per_night = hotel.get("base_price") or 100
+    scored = score_hotel(
+        ai_metrics,
+        price_per_night=price_per_night,
+        avg_price=price_per_night,
+        trip_type=trip_type,
+        profile=profile,
+    )
+
+    return {
+        "id": hotel["id"],
+        "name": hotel["name"],
+        "city": hotel.get("city"),
+        "country": hotel.get("country"),
+        "district": hotel.get("district"),
+        "rating": hotel.get("rating"),
+        "location_score": hotel.get("location_score"),
+        "price_per_night": price_per_night,
         "quality_score": scored.get("quality_score"),
         "value_for_money": scored.get("value_for_money"),
         "final_score": scored.get("final_score"),

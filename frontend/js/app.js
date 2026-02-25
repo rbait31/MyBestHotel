@@ -32,6 +32,10 @@ function app() {
     hotels: [],
     loading: false,
     error: "",
+    checkHotelName: "",
+    checkedHotel: null,
+    checkHotelLoading: false,
+    checkHotelError: "",
     invalidFields: { city: false, country: false, check_in: false, check_out: false },
     backendOk: null,
     lastSearched: false,
@@ -237,6 +241,34 @@ function app() {
         document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
       } finally {
         this.loading = false;
+      }
+    },
+
+    async runCheckHotel() {
+      const name = (this.checkHotelName || "").trim();
+      if (!name) {
+        this.checkHotelError = "Введите название отеля";
+        return;
+      }
+      this.checkHotelError = "";
+      this.checkHotelLoading = true;
+      this.checkedHotel = null;
+      try {
+        const profileForCheck = { ...this.profile };
+        profileForCheck.budget_min = this.getEffectiveBudgetMin();
+        profileForCheck.budget_max = this.getEffectiveBudgetMax();
+        const data = await checkHotel({
+          hotel_name: name,
+          city: this.city || "",
+          country: this.country || "",
+          profile: profileForCheck,
+        });
+        this.checkedHotel = data;
+        document.querySelector(".hotel-check-result")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (e) {
+        this.checkHotelError = e.message || "Ошибка запроса";
+      } finally {
+        this.checkHotelLoading = false;
       }
     },
 
