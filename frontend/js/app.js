@@ -334,6 +334,16 @@ function app() {
     },
 
     async runCheckHotel() {
+      const missing = [];
+      if (!this.city?.trim()) missing.push("Город");
+      if (!this.country?.trim()) missing.push("Страна");
+      if (!this.check_in?.trim()) missing.push("Дата заезда");
+      if (!this.check_out?.trim()) missing.push("Дата выезда");
+      if (missing.length > 0) {
+        this.checkHotelError = "Заполните обязательные поля поиска: " + missing.join(", ");
+        return;
+      }
+
       const name = (this.checkHotelName || this.checkHotelInput || "").trim();
       const validHotel = HOTELS.some((h) => h.name === name);
       if (!name) {
