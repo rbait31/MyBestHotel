@@ -153,26 +153,28 @@
                 <button type="submit" class="btn btn-primary" :disabled="checkHotelLoading">Проверить</button>
             </form>
             <div x-show="checkHotelLoading" x-transition class="message message-loading" x-cloak>Проверяю отель…</div>
-            <div x-show="checkedHotel && !checkHotelLoading" class="results" id="check-hotel-result">
-                <h2>Результат проверки</h2>
-                <div class="hotel-grid">
-                    <article class="card hotel-card">
-                        <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
-                        <p class="hotel-meta"><span x-text="checkedHotel.district"></span> · Рейтинг <span x-text="checkedHotel.rating"></span></p>
-                        <template x-if="checkedHotel.price_per_night != null">
-                            <p class="hotel-price"><strong x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></strong> / ночь</p>
-                        </template>
-                        <p class="hotel-location" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
-                        <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null">
-                            <template x-if="checkedHotel.final_score != null"><p><strong>Итоговая оценка:</strong> <span x-text="checkedHotel.final_score"></span>/10</p></template>
-                            <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
-                            <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
-                            <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>
-                            <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>
-                            <p class="verdict" x-show="checkedHotel.verdict" x-text="checkedHotel.verdict"></p>
-                        </div>
-                    </article>
-                </div>
+        </section>
+
+        <!-- Результат проверки гостиницы — отдельная карточка под блоком Проверить -->
+        <section x-show="checkedHotel && !checkHotelLoading" class="results" id="check-hotel-result">
+            <h2>Результат проверки</h2>
+            <div class="hotel-grid">
+                <article class="card hotel-card">
+                    <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
+                    <p class="hotel-meta"><span x-text="checkedHotel.district"></span> · Рейтинг <span x-text="checkedHotel.rating"></span></p>
+                    <template x-if="checkedHotel.price_per_night != null">
+                        <p class="hotel-price"><strong x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></strong> / ночь</p>
+                    </template>
+                    <p class="hotel-location" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
+                    <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null">
+                        <template x-if="checkedHotel.final_score != null"><p><strong>Итоговая оценка:</strong> <span x-text="checkedHotel.final_score"></span>/10</p></template>
+                        <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
+                        <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
+                        <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>
+                        <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>
+                        <p class="verdict" x-show="checkedHotel.verdict" x-text="checkedHotel.verdict"></p>
+                    </div>
+                </article>
             </div>
         </section>
     </main>
