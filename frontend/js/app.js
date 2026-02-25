@@ -2,6 +2,11 @@
  * My Best Hotel — основная логика приложения (Alpine.js data).
  * Город → страна (однозначно)
  */
+const CITIES = [
+  { value: "Paris", label: "Paris", searchTerms: ["paris", "париж"] },
+  { value: "Barcelona", label: "Barcelona", searchTerms: ["barcelona", "барселона"] },
+  { value: "Madrid", label: "Madrid", searchTerms: ["madrid", "мадрид"] },
+];
 const CITY_TO_COUNTRY = {
   Paris: "France",
   Barcelona: "Spain",
@@ -15,6 +20,9 @@ const ALL_COUNTRIES = ["France", "Spain"];
 function app() {
   return {
     city: "",
+    cityInput: "",
+    citySuggestions: [],
+    cityDropdownOpen: false,
     country: "",
     check_in: "",
     check_out: "",
@@ -25,13 +33,42 @@ function app() {
     invalidFields: { city: false, country: false, check_in: false, check_out: false },
     backendOk: null,
     lastSearched: false,
-    /** Варианты для селектора страны */
     countryOptions: [],
-    /** true — страна подставлена автоматически, селектор заблокирован */
     countryLocked: false,
+
+    onCityInput(val) {
+      this.cityInput = val;
+      this.cityDropdownOpen = true;
+      const q = (val || "").trim().toLowerCase();
+      if (!q) {
+        this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
+        return;
+      }
+      this.citySuggestions = CITIES.filter((c) =>
+        c.searchTerms.some((t) => t.startsWith(q) || c.label.toLowerCase().startsWith(q))
+      ).map((c) => ({ value: c.value, label: c.label }));
+    },
+
+    selectCity(value) {
+      const c = CITIES.find((x) => x.value === value);
+      if (c) {
+        this.cityInput = c.label;
+        this.city = c.value;
+        this.cityDropdownOpen = false;
+        this.onCityChange(c.value);
+      }
+    },
+
+    onCityFocus() {
+      this.cityDropdownOpen = true;
+      if (!this.cityInput.trim()) {
+        this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
+      }
+    },
 
     async init() {
       this.profile = await loadProfile();
+      this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
       this.$watch("city", (value) => this.onCityChange(value));
       this.onCityChange(this.city);
       try {
@@ -51,6 +88,8 @@ function app() {
       }
       const c = city.trim();
       if (CITY_TO_COUNTRY[c]) {
+        const label = CITIES.find((x) => x.value === c)?.label || c;
+        if (this.cityInput !== label) this.cityInput = label;
         const cnt = CITY_TO_COUNTRY[c];
         this.countryOptions = [cnt];
         this.countryLocked = true;
@@ -70,8 +109,13 @@ function app() {
 
     async runSearch() {
       this.error = "";
+      const validCity = CITIES.some((c) => c.value === this.city);
+      if (!validCity) {
+        this.city = "";
+        this.cityInput = this.cityInput.trim();
+      }
       const empty = {
-        city: !this.city.trim(),
+        city: !validCity || !this.city.trim(),
         country: !this.country.trim(),
         check_in: !this.check_in,
         check_out: !this.check_out,

@@ -30,14 +30,31 @@
             </div>
             <form @submit.prevent="runSearch()" class="form">
                 <div class="form-row">
-                    <label for="search-city">
+                    <label for="search-city" class="city-autocomplete-wrap">
                         Город
-                        <select id="search-city" name="city" autocomplete="address-level2" x-model="city" :class="{ 'field-invalid': invalidFields.city }">
-                            <option value="">Выберите город</option>
-                            <option value="Paris">Paris</option>
-                            <option value="Barcelona">Barcelona</option>
-                            <option value="Madrid">Madrid</option>
-                        </select>
+                        <div class="city-autocomplete" @click.outside="cityDropdownOpen = false">
+                            <input id="search-city" name="city" type="text" autocomplete="off"
+                                placeholder="Введите город"
+                                :value="cityInput"
+                                @input="onCityInput($event.target.value)"
+                                @focus="onCityFocus()"
+                                :class="{ 'field-invalid': invalidFields.city }"
+                            />
+                            <div class="city-autocomplete-dropdown" x-show="cityDropdownOpen" x-transition x-cloak>
+                                <template x-for="c in citySuggestions" :key="c.value">
+                                    <button type="button" class="city-autocomplete-item"
+                                        @click="selectCity(c.value)"
+                                        x-text="c.label">
+                                    </button>
+                                </template>
+                                <p x-show="cityInput.length > 0 && citySuggestions.length === 0" class="city-autocomplete-empty">
+                                    Город не найден. Выберите из списка ниже.
+                                </p>
+                            </div>
+                            <p class="form-hint form-hint-city" x-show="cityInput.length === 1"
+                                x-text="'Сейчас в системе рассматриваются только три города: Мадрид, Барселона и Париж'">
+                            </p>
+                        </div>
                     </label>
                     <label for="search-country">
                         Страна

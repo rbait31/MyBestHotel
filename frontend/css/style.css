@@ -146,6 +146,66 @@ select.field-auto {
   flex: 1 1 180px;
 }
 
+.city-autocomplete-wrap {
+  position: relative;
+}
+
+.city-autocomplete {
+  position: relative;
+}
+
+.city-autocomplete input {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 0.25rem;
+}
+
+.city-autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-width: 280px;
+  margin-top: 2px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.city-autocomplete-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.city-autocomplete-item:hover {
+  background: var(--bg);
+}
+
+.city-autocomplete-empty {
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.form-hint-city {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .requirements-section {
   font-size: 1.05rem;
   margin: 1.5rem 0 0.75rem 0;
