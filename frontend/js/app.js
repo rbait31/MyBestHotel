@@ -141,6 +141,15 @@ function app() {
       return parts.length ? parts.join(" · ") : null;
     },
 
+    get displayHotels() {
+      if (!this.checkedHotel) return this.hotels;
+      return this.hotels.map((h) =>
+        this.checkedHotel && (this.checkedHotel.id === h.id || this.checkedHotel.name === h.name)
+          ? this.checkedHotel
+          : h
+      );
+    },
+
     get profileSummaryForCheck() {
       const p = this.profile || {};
       const parts = [];
@@ -386,6 +395,17 @@ function app() {
         return;
       }
       this.checkHotelError = "";
+
+      const fromSearch = this.hotels.find(
+        (h) => h.name === name.trim() && (!this.city || h.city === this.city)
+      );
+      if (fromSearch) {
+        this.checkedHotel = fromSearch;
+        this.lastChecked = true;
+        document.querySelector("#check-hotel-result")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
       this.checkHotelLoading = true;
       this.checkedHotel = null;
       try {
