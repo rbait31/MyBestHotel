@@ -17,8 +17,11 @@
 
     <main class="main">
         <section class="card">
-            <h2>Выбранные отели</h2>
-            <p x-show="choices.length === 0" class="form-hint">Вы ещё не выбрали ни одного отеля. Отметьте отели в результатах поиска или проверки.</p>
+            <h2 x-show="choices.length > 0">Выбранные отели</h2>
+            <div x-show="choices.length === 0">
+                <p class="message message-info">У вас нет выбранных отелей</p>
+                <a href="index.html" class="btn btn-back-search">Вернуться к поиску</a>
+            </div>
             <div class="hotel-grid" x-show="choices.length > 0">
                 <template x-for="item in choices" :key="item.hotel.id">
                     <article class="card hotel-card">
@@ -47,10 +50,7 @@
                 </template>
             </div>
 
-            <div class="profile-actions profile-actions-my-choice" x-show="choices.length > 0">
-                <a href="requirements.html" class="btn btn-secondary profile-back">Вернуться к требованиям</a>
-                <a href="index.html" class="btn btn-primary profile-back">Вернуться к поиску</a>
-            </div>
+            <a href="index.html" class="btn btn-back-search" x-show="choices.length > 0">Вернуться к поиску</a>
         </section>
     </main>
 

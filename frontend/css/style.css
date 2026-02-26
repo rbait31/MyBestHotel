@@ -561,6 +561,11 @@ label.btn.btn-json {
   padding: 1rem 1.25rem;
 }
 
+.message-info {
+  background: #f0f4f8;
+  color: var(--text-muted);
+}
+
 .results-header {
   display: flex;
   flex-wrap: wrap;
@@ -708,6 +713,23 @@ label.btn.btn-json {
 
 .profile-actions-my-choice .btn-primary.profile-back {
   color: #fff;
+}
+
+.btn-back-search {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: #f0f0f0;
+  color: #1a6b4f;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn-back-search:hover {
+  background: #e8e8e8;
 }
 
 .hotel-extra .verdict {
