@@ -82,6 +82,7 @@ function app() {
     invalidFields: { city: false, country: false, check_in: false, check_out: false },
     backendOk: null,
     lastSearched: false,
+    lastChecked: false,
     countryOptions: [],
     countryLocked: false,
 
@@ -122,6 +123,29 @@ function app() {
       if (effMax != null && effMax > 0) {
         parts.push("до €" + effMax + "/ночь");
       }
+      const prefLabels = {
+        preference_center: "центр",
+        preference_breakfast: "завтрак",
+        preference_cleanliness: "чистота",
+        preference_quiet: "тишина",
+        preference_wifi: "Wi‑Fi",
+        preference_nature: "природа",
+      };
+      const important = [];
+      for (const [key, label] of Object.entries(prefLabels)) {
+        if ((p[key] ?? 3) >= 4) important.push(label);
+      }
+      if (important.length) {
+        parts.push("важно: " + important.join(", "));
+      }
+      return parts.length ? parts.join(" · ") : null;
+    },
+
+    get profileSummaryForCheck() {
+      const p = this.profile || {};
+      const parts = [];
+      const tripLabels = { leisure: "Отдых", business: "Бизнес" };
+      parts.push(tripLabels[p.trip_type] || "Отдых");
       const prefLabels = {
         preference_center: "центр",
         preference_breakfast: "завтрак",
@@ -368,6 +392,7 @@ function app() {
           profile: profileForCheck,
         });
         this.checkedHotel = data;
+        this.lastChecked = true;
         document.querySelector("#check-hotel-result")?.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (e) {
         this.checkHotelError = e.message || "Ошибка запроса";

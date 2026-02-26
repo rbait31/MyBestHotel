@@ -88,6 +88,10 @@ body {
   color: var(--primary-hover);
 }
 
+.profile-check-hint {
+  margin-top: 0.5rem;
+}
+
 .check-hotel-section {
   margin-top: 2.5rem;
 }
