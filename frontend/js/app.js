@@ -83,6 +83,7 @@ function app() {
     backendOk: null,
     lastSearched: false,
     lastChecked: false,
+    sortBy: "final_score",
     countryOptions: [],
     countryLocked: false,
 
@@ -142,8 +143,8 @@ function app() {
     },
 
     get displayHotels() {
-      if (!this.lastSearched) return this.hotels;
-      if (!this.checkedHotel) return this.hotels;
+      if (!this.lastSearched) return this.sortHotels(this.hotels);
+      if (!this.checkedHotel) return this.sortHotels(this.hotels);
       const checked = this.checkedHotel;
       const maxScore = Math.max(
         0,
@@ -164,7 +165,31 @@ function app() {
       if (shouldAdd) {
         list = [checked, ...list];
       }
-      return list;
+      return this.sortHotels(list);
+    },
+
+    sortHotels(list) {
+      const by = this.sortBy || "final_score";
+      const sorted = [...list];
+      sorted.sort((a, b) => {
+        if (by === "price") {
+          const pa = a.price_per_night ?? Infinity;
+          const pb = b.price_per_night ?? Infinity;
+          return pa - pb;
+        }
+        if (by === "final_score") {
+          const sa = a.final_score ?? -1;
+          const sb = b.final_score ?? -1;
+          return sb - sa;
+        }
+        if (by === "rating") {
+          const ra = a.rating ?? -1;
+          const rb = b.rating ?? -1;
+          return rb - ra;
+        }
+        return 0;
+      });
+      return sorted;
     },
 
     get profileSummaryForCheck() {

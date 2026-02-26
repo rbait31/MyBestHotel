@@ -94,7 +94,17 @@
 
         <!-- Результаты: список отелей -->
         <section class="results" x-show="lastSearched && displayHotels.length > 0" id="results">
-            <h2>Найдено отелей: <span x-text="displayHotels.length"></span></h2>
+            <div class="results-header">
+                <h2>Найдено отелей: <span x-text="displayHotels.length"></span></h2>
+                <div class="results-sort">
+                    <span class="results-sort-label">Сортировка:</span>
+                    <select x-model="sortBy" class="results-sort-select" title="Выберите способ сортировки">
+                        <option value="final_score">По итоговой оценке</option>
+                        <option value="price">По цене</option>
+                        <option value="rating">По рейтингу</option>
+                    </select>
+                </div>
+            </div>
             <div class="hotel-grid">
                 <template x-for="h in displayHotels" :key="h.id">
                     <article class="card hotel-card">
