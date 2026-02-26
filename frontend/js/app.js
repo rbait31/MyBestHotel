@@ -143,11 +143,27 @@ function app() {
 
     get displayHotels() {
       if (!this.checkedHotel) return this.hotels;
-      return this.hotels.map((h) =>
-        this.checkedHotel && (this.checkedHotel.id === h.id || this.checkedHotel.name === h.name)
-          ? this.checkedHotel
-          : h
+      const checked = this.checkedHotel;
+      const maxScore = Math.max(
+        0,
+        ...this.hotels.map((h) => (h.final_score != null ? h.final_score : 0))
       );
+      const inList = this.hotels.some(
+        (h) => checked.id === h.id || checked.name === h.name
+      );
+      const sameCity = !this.city || checked.city === this.city;
+      const shouldAdd =
+        !inList &&
+        sameCity &&
+        (checked.final_score ?? 0) > maxScore;
+
+      let list = this.hotels.map((h) =>
+        checked.id === h.id || checked.name === h.name ? checked : h
+      );
+      if (shouldAdd) {
+        list = [checked, ...list];
+      }
+      return list;
     },
 
     get profileSummaryForCheck() {
