@@ -7,11 +7,8 @@ function hotelToMarkdown(hotel) {
   const lines = [];
   lines.push("# " + (h.name || "Отель"));
   lines.push("");
-  if (h.district || h.rating != null) {
-    const meta = [h.district, h.rating != null ? "Рейтинг " + h.rating : null].filter(Boolean).join(" · ");
-    lines.push(meta);
-    lines.push("");
-  }
+  lines.push("Рейтинг " + (h.rating != null ? h.rating : "—"));
+  lines.push("");
   if (h.final_score != null) {
     lines.push("**Итоговая оценка:** " + h.final_score + "/10");
     lines.push("");

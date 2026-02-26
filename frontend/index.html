@@ -124,7 +124,7 @@
                 <template x-for="h in displayHotels" :key="h.id">
                     <article class="card hotel-card">
                         <h3 class="hotel-name" x-text="h.name"></h3>
-                        <p class="hotel-meta"><span x-text="h.district"></span> · Рейтинг <span x-text="h.rating"></span></p>
+                        <p class="hotel-meta">Рейтинг <span x-text="h.rating || '—'"></span></p>
                         <div class="hotel-highlights">
                             <template x-if="h.final_score != null">
                                 <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="h.final_score + '/10'"></span></div>
@@ -204,7 +204,7 @@
             <div class="hotel-grid">
                 <article class="card hotel-card">
                     <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
-                    <p class="hotel-meta"><span x-text="checkedHotel.district"></span> · Рейтинг <span x-text="checkedHotel.rating"></span></p>
+                    <p class="hotel-meta">Рейтинг <span x-text="checkedHotel.rating || '—'"></span></p>
                     <div class="hotel-highlights">
                         <template x-if="checkedHotel.final_score != null">
                             <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="checkedHotel.final_score + '/10'"></span></div>
