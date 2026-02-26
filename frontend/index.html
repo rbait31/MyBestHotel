@@ -144,6 +144,7 @@
                             <input type="checkbox" :checked="isMyChoice(h.id)" @change="toggleMyChoice(h)" />
                             <span>Мой выбор</span>
                         </label>
+                        <button type="button" class="btn btn-secondary btn-download-card" @click="downloadHotelCard(h)">Скачать карточку</button>
                     </article>
                 </template>
             </div>
@@ -221,6 +222,7 @@
                         <input type="checkbox" :checked="isMyChoice(checkedHotel.id)" @change="toggleMyChoice(checkedHotel)" />
                         <span>Мой выбор</span>
                     </label>
+                    <button type="button" class="btn btn-secondary btn-download-card" @click="downloadHotelCard(checkedHotel)">Скачать карточку</button>
                 </article>
             </div>
         </section>

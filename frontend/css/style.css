@@ -693,7 +693,8 @@ label.btn.btn-json {
   color: var(--text-muted);
 }
 
-.btn-remove-choice {
+.btn-remove-choice,
+.btn-download-card {
   margin-top: 0.75rem;
   font-size: 0.85rem;
 }

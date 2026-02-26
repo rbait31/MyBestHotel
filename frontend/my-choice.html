@@ -48,6 +48,7 @@
                             <p class="verdict" x-show="item.hotel.verdict" x-text="item.hotel.verdict"></p>
                         </div>
                         <button type="button" class="btn btn-secondary btn-remove-choice" @click="removeChoice(item.hotel.id)">Убрать из выбора</button>
+                        <button type="button" class="btn btn-secondary btn-download-card" @click="downloadHotelCard(item.hotel)">Скачать карточку</button>
                     </article>
                 </template>
             </div>
@@ -59,6 +60,7 @@
     </main>
 
     <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
     <script>
       const MY_CHOICE_KEY = "mybesthotel_my_choice";
 
