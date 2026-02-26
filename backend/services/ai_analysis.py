@@ -89,9 +89,10 @@ Respond with ONLY a valid JSON object (no markdown, no explanation), with these 
 - location: number 0-10
 - staff: number 0-10
 - risk_weight: number 0-1 (0=no risk, 1=high risk)
-- red_flags: array of strings (e.g. ["noise", "dirty"] or [])
+- red_flags: array of strings — ONLY if reviews explicitly mention the issue (e.g. ["dirty"] if reviews say dirty). Do NOT add "noise" if reviews say "quiet at night".
 - pros: array of short strings (max 5)
 - cons: array of short strings (max 5)
+IMPORTANT: red_flags and pros must be consistent. If reviews say "quiet at night", do NOT add "noise" to red_flags.
 - consistency_score: number 0-1 (1=reviews agree)
 - verdict: one short sentence in Russian for the traveler
 If data is insufficient, use null for numbers and [] for arrays, and set verdict to "Недостаточно отзывов для вывода."
@@ -153,6 +154,35 @@ def analyze_reviews(
         return _fallback_analysis(reviews)
 
 
+# Противоречия: ключевые слова для noise в red_flags vs тишина в pros
+_NOISE_RED_FLAG_TERMS = ("noise", "noisy", "noise all night", "night noise", "loud")
+_QUIET_PRO_TERMS = ("quiet", "peaceful", "silent", "calm", "тихий", "спокойн")
+
+
+def _resolve_contradictions(red_flags: list[str], pros: list[str], cons: list[str]) -> tuple[list[str], list[str], list[str]]:
+    """
+    Устранить взаимоисключающие утверждения: noise в red_flags и quiet в pros.
+    Если в pros явно указана тишина — убираем noise из red_flags.
+    """
+    red_out = list(red_flags)
+    pros_out = list(pros)
+    cons_out = list(cons)
+
+    pros_text = " ".join(p.lower() for p in pros_out)
+    has_quiet_in_pros = any(q in pros_text for q in _QUIET_PRO_TERMS)
+
+    if has_quiet_in_pros:
+        red_out = [r for r in red_out if not any(n in r.lower() for n in _NOISE_RED_FLAG_TERMS)]
+
+    red_text = " ".join(r.lower() for r in red_out)
+    has_noise_in_red = any(n in red_text for n in _NOISE_RED_FLAG_TERMS)
+
+    if has_noise_in_red:
+        pros_out = [p for p in pros_out if not any(q in p.lower() for q in _QUIET_PRO_TERMS)]
+
+    return red_out, pros_out, cons_out
+
+
 def _normalize_analysis(data: dict) -> dict:
     """Привести типы и значения к ожидаемому формату."""
     def num(v, default=0, low=0, high=10):
@@ -168,6 +198,11 @@ def _normalize_analysis(data: dict) -> dict:
             return [str(x) for x in v[:10]]
         return []
 
+    red_flags = arr(data.get("red_flags"))
+    pros = arr(data.get("pros"))
+    cons = arr(data.get("cons"))
+    red_flags, pros, cons = _resolve_contradictions(red_flags, pros, cons)
+
     return {
         "cleanliness": num(data.get("cleanliness"), 7, 0, 10),
         "noise": num(data.get("noise"), 7, 0, 10),
@@ -175,9 +210,9 @@ def _normalize_analysis(data: dict) -> dict:
         "location": num(data.get("location"), 7, 0, 10),
         "staff": num(data.get("staff"), 7, 0, 10),
         "risk_weight": num(data.get("risk_weight"), 0.1, 0, 1),
-        "red_flags": arr(data.get("red_flags")),
-        "pros": arr(data.get("pros")),
-        "cons": arr(data.get("cons")),
+        "red_flags": red_flags,
+        "pros": pros,
+        "cons": cons,
         "consistency_score": num(data.get("consistency_score"), 0.7, 0, 1),
         "verdict": str(data.get("verdict") or "Недостаточно отзывов для вывода.")[:500],
     }
