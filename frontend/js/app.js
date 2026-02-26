@@ -59,19 +59,27 @@ const HOTEL_HINT_EXAMPLES = {
 
 const MY_CHOICE_KEY = "mybesthotel_my_choice";
 
-function loadMyChoiceIds() {
+function loadMyChoices() {
   try {
     const raw = localStorage.getItem(MY_CHOICE_KEY);
     if (!raw) return [];
     const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr : [];
+    if (!Array.isArray(arr)) return [];
+    return arr.map((item) => {
+      if (typeof item === "string") {
+        return { hotel: { id: item, name: item }, selectedAt: null };
+      }
+      if (item?.hotel) return item;
+      if (item?.id) return { hotel: item, selectedAt: item.selectedAt || null };
+      return null;
+    }).filter(Boolean);
   } catch {
     return [];
   }
 }
 
-function saveMyChoiceIds(ids) {
-  localStorage.setItem(MY_CHOICE_KEY, JSON.stringify(ids));
+function saveMyChoices(items) {
+  localStorage.setItem(MY_CHOICE_KEY, JSON.stringify(items));
 }
 
 function app() {
@@ -101,23 +109,30 @@ function app() {
     lastSearched: false,
     lastChecked: false,
     sortBy: "final_score",
-    myChoiceIds: [],
+    myChoices: [],
     countryOptions: [],
     countryLocked: false,
 
+    get myChoiceIds() {
+      return this.myChoices.map((x) => x.hotel?.id).filter(Boolean);
+    },
     isMyChoice(hotelId) {
       return this.myChoiceIds.includes(hotelId);
     },
     toggleMyChoice(hotel) {
       const id = hotel?.id;
       if (!id) return;
-      const idx = this.myChoiceIds.indexOf(id);
+      const idx = this.myChoices.findIndex((x) => x.hotel?.id === id);
       if (idx >= 0) {
-        this.myChoiceIds = this.myChoiceIds.filter((x) => x !== id);
+        this.myChoices = this.myChoices.filter((x) => x.hotel?.id !== id);
       } else {
-        this.myChoiceIds = [...this.myChoiceIds, id];
+        const entry = {
+          hotel: { ...hotel },
+          selectedAt: new Date().toISOString(),
+        };
+        this.myChoices = [...this.myChoices, entry];
       }
-      saveMyChoiceIds(this.myChoiceIds);
+      saveMyChoices(this.myChoices);
     },
 
     get minCheckIn() {
@@ -280,7 +295,7 @@ function app() {
 
     async init() {
       await this.syncProfileFromStorage();
-      this.myChoiceIds = loadMyChoiceIds();
+      this.myChoices = loadMyChoices();
       this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
       this.hotelSuggestions = HOTELS.map((h) => ({ value: h.name, label: h.name, city: h.city }));
       this.$watch("city", (value) => this.onCityChange(value));
@@ -292,7 +307,10 @@ function app() {
         this.backendOk = false;
       }
       window.addEventListener('pageshow', (event) => {
-        if (event.persisted) this.syncProfileFromStorage();
+        if (event.persisted) {
+          this.syncProfileFromStorage();
+          this.myChoices = loadMyChoices();
+        }
       });
     },
 

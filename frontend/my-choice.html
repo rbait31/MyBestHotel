@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+    <title>Мой выбор — My Best Hotel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+</head>
+<body x-data="myChoiceApp()" x-init="init()">
+    <header class="header">
+        <h1>My Best Hotel</h1>
+        <p class="tagline">Мой выбор</p>
+    </header>
+
+    <main class="main">
+        <section class="card">
+            <h2>Выбранные отели</h2>
+            <p x-show="choices.length === 0" class="form-hint">Вы ещё не выбрали ни одного отеля. Отметьте отели в результатах поиска или проверки.</p>
+            <div class="hotel-grid" x-show="choices.length > 0">
+                <template x-for="item in choices" :key="item.hotel.id">
+                    <article class="card hotel-card">
+                        <h3 class="hotel-name" x-text="item.hotel.name"></h3>
+                        <p class="hotel-meta"><span x-text="item.hotel.district || ''"></span> · Рейтинг <span x-text="item.hotel.rating || '—'"></span></p>
+                        <p class="hotel-selected-date" x-show="item.selectedAt">
+                            <strong>Дата выбора:</strong> <span x-text="formatDate(item.selectedAt)"></span>
+                        </p>
+                        <template x-if="item.hotel.final_score != null">
+                            <p class="hotel-final-score"><strong>Итоговая оценка:</strong> <span class="hotel-final-score-value" x-text="item.hotel.final_score + '/10'"></span></p>
+                        </template>
+                        <template x-if="item.hotel.price_per_night != null">
+                            <p class="hotel-price"><strong x-text="'€ ' + item.hotel.price_per_night.toFixed(0)"></strong> / ночь</p>
+                        </template>
+                        <p class="hotel-location" x-show="item.hotel.location_score != null" x-text="'Локация: ' + item.hotel.location_score + '/10'"></p>
+                        <div class="hotel-extra" x-show="item.hotel.quality_score != null || item.hotel.final_score != null || (item.hotel.consistency_score != null && item.hotel.consistency_score < 0.6)">
+                            <p x-show="item.hotel.quality_score != null"><strong>Оценка:</strong> <span x-text="item.hotel.quality_score"></span> · Value: <span x-text="item.hotel.value_for_money"></span></p>
+                            <p x-show="item.hotel.consistency_score != null && item.hotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((item.hotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
+                            <p x-show="item.hotel.red_flags && item.hotel.red_flags.length" class="red-flags">⚠ <span x-text="item.hotel.red_flags.join(', ')"></span></p>
+                            <p x-show="item.hotel.pros && item.hotel.pros.length"><strong>Плюсы:</strong> <span x-text="item.hotel.pros.join('; ')"></span></p>
+                            <p x-show="item.hotel.cons && item.hotel.cons.length"><strong>Минусы:</strong> <span x-text="item.hotel.cons.join('; ')"></span></p>
+                            <p class="verdict" x-show="item.hotel.verdict" x-text="item.hotel.verdict"></p>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-remove-choice" @click="removeChoice(item.hotel.id)">Убрать из выбора</button>
+                    </article>
+                </template>
+            </div>
+
+            <div class="profile-actions profile-actions-my-choice" x-show="choices.length > 0">
+                <a href="requirements.html" class="btn btn-secondary profile-back">Вернуться к требованиям</a>
+                <a href="index.html" class="btn btn-primary profile-back">Вернуться к поиску</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script>
+      const MY_CHOICE_KEY = "mybesthotel_my_choice";
+
+      function loadMyChoices() {
+        try {
+          const raw = localStorage.getItem(MY_CHOICE_KEY);
+          if (!raw) return [];
+          const arr = JSON.parse(raw);
+          if (!Array.isArray(arr)) return [];
+          return arr.map((item) => {
+            if (typeof item === "string") {
+              return { hotel: { id: item, name: item }, selectedAt: null };
+            }
+            if (item?.hotel) return item;
+            if (item?.id) return { hotel: item, selectedAt: item.selectedAt || null };
+            return null;
+          }).filter(Boolean);
+        } catch {
+          return [];
+        }
+      }
+
+      function saveMyChoices(items) {
+        localStorage.setItem(MY_CHOICE_KEY, JSON.stringify(items));
+      }
+
+      function myChoiceApp() {
+        return {
+          choices: [],
+          init() {
+            this.choices = loadMyChoices();
+          },
+          formatDate(iso) {
+            if (!iso) return "—";
+            try {
+              const d = new Date(iso);
+              return d.toLocaleDateString("ru-RU", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              });
+            } catch {
+              return iso;
+            }
+          },
+          removeChoice(hotelId) {
+            this.choices = this.choices.filter((x) => x.hotel?.id !== hotelId);
+            saveMyChoices(this.choices);
+          },
+        };
+      }
+    </script>
+</body>
+</html>
