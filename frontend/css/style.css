@@ -652,6 +652,28 @@ label.btn.btn-json {
   color: var(--error);
 }
 
+.hotel-my-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.hotel-my-choice input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.hotel-my-choice:hover {
+  color: var(--text);
+}
+
 .hotel-extra .verdict {
   margin-top: 0.5rem;
   font-style: italic;

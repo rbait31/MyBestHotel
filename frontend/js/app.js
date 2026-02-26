@@ -57,6 +57,23 @@ const HOTEL_HINT_EXAMPLES = {
   Madrid: ["Hostal San Lorenzo", "Ibis Styles Madrid Prado", "The Hat Madrid"],
 };
 
+const MY_CHOICE_KEY = "mybesthotel_my_choice";
+
+function loadMyChoiceIds() {
+  try {
+    const raw = localStorage.getItem(MY_CHOICE_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMyChoiceIds(ids) {
+  localStorage.setItem(MY_CHOICE_KEY, JSON.stringify(ids));
+}
+
 function app() {
   return {
     city: "",
@@ -84,8 +101,24 @@ function app() {
     lastSearched: false,
     lastChecked: false,
     sortBy: "final_score",
+    myChoiceIds: [],
     countryOptions: [],
     countryLocked: false,
+
+    isMyChoice(hotelId) {
+      return this.myChoiceIds.includes(hotelId);
+    },
+    toggleMyChoice(hotel) {
+      const id = hotel?.id;
+      if (!id) return;
+      const idx = this.myChoiceIds.indexOf(id);
+      if (idx >= 0) {
+        this.myChoiceIds = this.myChoiceIds.filter((x) => x !== id);
+      } else {
+        this.myChoiceIds = [...this.myChoiceIds, id];
+      }
+      saveMyChoiceIds(this.myChoiceIds);
+    },
 
     get minCheckIn() {
       return new Date().toISOString().slice(0, 10);
@@ -247,6 +280,7 @@ function app() {
 
     async init() {
       await this.syncProfileFromStorage();
+      this.myChoiceIds = loadMyChoiceIds();
       this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
       this.hotelSuggestions = HOTELS.map((h) => ({ value: h.name, label: h.name, city: h.city }));
       this.$watch("city", (value) => this.onCityChange(value));

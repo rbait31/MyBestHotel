@@ -125,6 +125,10 @@
                             <p x-show="h.cons && h.cons.length"><strong>Минусы:</strong> <span x-text="h.cons.join('; ')"></span></p>
                             <p class="verdict" x-show="h.verdict" x-text="h.verdict"></p>
                         </div>
+                        <label class="hotel-my-choice" :title="'Эта информация будет использована ИИ в будущем для оценки отелей в других поездках'">
+                            <input type="checkbox" :checked="isMyChoice(h.id)" @change="toggleMyChoice(h)" />
+                            <span>Мой выбор</span>
+                        </label>
                     </article>
                 </template>
             </div>
@@ -198,6 +202,10 @@
                         <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>
                         <p class="verdict" x-show="checkedHotel.verdict" x-text="checkedHotel.verdict"></p>
                     </div>
+                    <label class="hotel-my-choice" :title="'Эта информация будет использована ИИ в будущем для оценки отелей в других поездках'">
+                        <input type="checkbox" :checked="isMyChoice(checkedHotel.id)" @change="toggleMyChoice(checkedHotel)" />
+                        <span>Мой выбор</span>
+                    </label>
                 </article>
             </div>
         </section>
