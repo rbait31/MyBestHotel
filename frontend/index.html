@@ -100,12 +100,15 @@
                     <article class="card hotel-card">
                         <h3 class="hotel-name" x-text="h.name"></h3>
                         <p class="hotel-meta"><span x-text="h.district"></span> · Рейтинг <span x-text="h.rating"></span></p>
+                        <template x-if="h.final_score != null">
+                            <p class="hotel-final-score"><strong>Итоговая оценка:</strong> <span class="hotel-final-score-value" x-text="h.final_score + '/10'"></span></p>
+                        </template>
                         <template x-if="h.price_per_night != null">
                             <p class="hotel-price"><strong x-text="'€ ' + h.price_per_night.toFixed(0)"></strong> / ночь</p>
                         </template>
                         <p class="hotel-location" x-text="'Локация: ' + h.location_score + '/10'"></p>
-                        <div class="hotel-extra" x-show="h.quality_score != null">
-                            <p><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Value: <span x-text="h.value_for_money"></span></p>
+                        <div class="hotel-extra" x-show="h.quality_score != null || h.final_score != null">
+                            <p x-show="h.quality_score != null"><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Value: <span x-text="h.value_for_money"></span></p>
                             <p x-show="h.red_flags && h.red_flags.length" class="red-flags">⚠ <span x-text="h.red_flags.join(', ')"></span></p>
                             <p x-show="h.pros && h.pros.length"><strong>Плюсы:</strong> <span x-text="h.pros.join('; ')"></span></p>
                             <p x-show="h.cons && h.cons.length"><strong>Минусы:</strong> <span x-text="h.cons.join('; ')"></span></p>
@@ -169,12 +172,14 @@
                 <article class="card hotel-card">
                     <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
                     <p class="hotel-meta"><span x-text="checkedHotel.district"></span> · Рейтинг <span x-text="checkedHotel.rating"></span></p>
+                    <template x-if="checkedHotel.final_score != null">
+                        <p class="hotel-final-score"><strong>Итоговая оценка:</strong> <span class="hotel-final-score-value" x-text="checkedHotel.final_score + '/10'"></span></p>
+                    </template>
                     <template x-if="checkedHotel.price_per_night != null">
                         <p class="hotel-price"><strong x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></strong> / ночь</p>
                     </template>
                     <p class="hotel-location" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
                     <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null">
-                        <template x-if="checkedHotel.final_score != null"><p><strong>Итоговая оценка:</strong> <span x-text="checkedHotel.final_score"></span>/10</p></template>
                         <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
                         <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
                         <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>

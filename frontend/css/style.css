@@ -580,6 +580,21 @@ label.btn.btn-json {
   color: var(--text-muted);
 }
 
+.hotel-final-score {
+  margin: 0.5rem 0 0 0;
+  padding: 0.4rem 0.6rem;
+  background: linear-gradient(135deg, rgba(26, 95, 74, 0.08), rgba(26, 95, 74, 0.04));
+  border-radius: 6px;
+  border-left: 3px solid var(--primary);
+  font-size: 1rem;
+}
+
+.hotel-final-score-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
 .hotel-price {
   margin: 0.5rem 0 0 0;
   font-size: 1.1rem;
