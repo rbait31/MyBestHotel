@@ -65,7 +65,8 @@ body {
   text-decoration: underline;
 }
 
-.search-form-settings .icon-gear {
+.search-form-settings .icon-gear,
+.search-form-settings .icon-bookmark {
   flex-shrink: 0;
 }
 
