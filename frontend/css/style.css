@@ -613,8 +613,10 @@ label.btn.btn-json {
 }
 
 .hotel-card .hotel-name {
-  margin: 0 0 0.35rem 0;
-  font-size: 1.1rem;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .hotel-meta {
@@ -623,28 +625,65 @@ label.btn.btn-json {
   color: var(--text-muted);
 }
 
+/* Визуальная иерархия: приоритет итоговой оценки и цены */
+.hotel-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
 .hotel-final-score {
-  margin: 0.5rem 0 0 0;
-  padding: 0.4rem 0.6rem;
-  background: linear-gradient(135deg, rgba(26, 95, 74, 0.08), rgba(26, 95, 74, 0.04));
-  border-radius: 6px;
-  border-left: 3px solid var(--primary);
-  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.85rem;
+  background: linear-gradient(135deg, rgba(26, 95, 74, 0.12), rgba(26, 95, 74, 0.05));
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+  min-width: 100px;
+}
+
+.hotel-final-score-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
 }
 
 .hotel-final-score-value {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary);
+  line-height: 1.2;
 }
 
 .hotel-price {
-  margin: 0.5rem 0 0 0;
-  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  min-width: 90px;
+}
+
+.hotel-price-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.hotel-price-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .hotel-location {
-  margin: 0.25rem 0 0 0;
+  margin: 0.5rem 0 0 0;
   font-size: 0.9rem;
   color: var(--text-muted);
 }

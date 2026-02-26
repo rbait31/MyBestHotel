@@ -32,12 +32,14 @@
                         <p class="hotel-selected-date" x-show="item.selectedAt">
                             <strong>Дата выбора:</strong> <span x-text="formatDate(item.selectedAt)"></span>
                         </p>
-                        <template x-if="item.hotel.final_score != null">
-                            <p class="hotel-final-score"><strong>Итоговая оценка:</strong> <span class="hotel-final-score-value" x-text="item.hotel.final_score + '/10'"></span></p>
-                        </template>
-                        <template x-if="item.hotel.price_per_night != null">
-                            <p class="hotel-price"><strong x-text="'€ ' + item.hotel.price_per_night.toFixed(0)"></strong> / ночь</p>
-                        </template>
+                        <div class="hotel-highlights">
+                            <template x-if="item.hotel.final_score != null">
+                                <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="item.hotel.final_score + '/10'"></span></div>
+                            </template>
+                            <template x-if="item.hotel.price_per_night != null">
+                                <div class="hotel-price"><span class="hotel-price-value" x-text="'€ ' + item.hotel.price_per_night.toFixed(0)"></span><span class="hotel-price-label">/ ночь</span></div>
+                            </template>
+                        </div>
                         <p class="hotel-location" x-show="item.hotel.location_score != null" x-text="'Локация: ' + item.hotel.location_score + '/10'"></p>
                         <div class="hotel-extra" x-show="item.hotel.quality_score != null || item.hotel.final_score != null || (item.hotel.consistency_score != null && item.hotel.consistency_score < 0.6)">
                             <p x-show="item.hotel.quality_score != null"><strong>Оценка:</strong> <span x-text="item.hotel.quality_score"></span> · Value: <span x-text="item.hotel.value_for_money"></span></p>

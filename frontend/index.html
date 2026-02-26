@@ -125,13 +125,15 @@
                     <article class="card hotel-card">
                         <h3 class="hotel-name" x-text="h.name"></h3>
                         <p class="hotel-meta"><span x-text="h.district"></span> · Рейтинг <span x-text="h.rating"></span></p>
-                        <template x-if="h.final_score != null">
-                            <p class="hotel-final-score"><strong>Итоговая оценка:</strong> <span class="hotel-final-score-value" x-text="h.final_score + '/10'"></span></p>
-                        </template>
-                        <template x-if="h.price_per_night != null">
-                            <p class="hotel-price"><strong x-text="'€ ' + h.price_per_night.toFixed(0)"></strong> / ночь</p>
-                        </template>
-                        <p class="hotel-location" x-text="'Локация: ' + h.location_score + '/10'"></p>
+                        <div class="hotel-highlights">
+                            <template x-if="h.final_score != null">
+                                <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="h.final_score + '/10'"></span></div>
+                            </template>
+                            <template x-if="h.price_per_night != null">
+                                <div class="hotel-price"><span class="hotel-price-value" x-text="'€ ' + h.price_per_night.toFixed(0)"></span><span class="hotel-price-label">/ ночь</span></div>
+                            </template>
+                        </div>
+                        <p class="hotel-location" x-show="h.location_score != null" x-text="'Локация: ' + h.location_score + '/10'"></p>
                         <div class="hotel-extra" x-show="h.quality_score != null || h.final_score != null || (h.consistency_score != null && h.consistency_score < 0.6)">
                             <p x-show="h.quality_score != null"><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Value: <span x-text="h.value_for_money"></span></p>
                             <p x-show="h.consistency_score != null && h.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((h.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
@@ -203,13 +205,15 @@
                 <article class="card hotel-card">
                     <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
                     <p class="hotel-meta"><span x-text="checkedHotel.district"></span> · Рейтинг <span x-text="checkedHotel.rating"></span></p>
-                    <template x-if="checkedHotel.final_score != null">
-                        <p class="hotel-final-score"><strong>Итоговая оценка:</strong> <span class="hotel-final-score-value" x-text="checkedHotel.final_score + '/10'"></span></p>
-                    </template>
-                    <template x-if="checkedHotel.price_per_night != null">
-                        <p class="hotel-price"><strong x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></strong> / ночь</p>
-                    </template>
-                    <p class="hotel-location" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
+                    <div class="hotel-highlights">
+                        <template x-if="checkedHotel.final_score != null">
+                            <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="checkedHotel.final_score + '/10'"></span></div>
+                        </template>
+                        <template x-if="checkedHotel.price_per_night != null">
+                            <div class="hotel-price"><span class="hotel-price-value" x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></span><span class="hotel-price-label">/ ночь</span></div>
+                        </template>
+                    </div>
+                    <p class="hotel-location" x-show="checkedHotel.location_score != null" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
                     <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null || (checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6)">
                         <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
                         <p x-show="checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((checkedHotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
