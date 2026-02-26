@@ -142,6 +142,7 @@ function app() {
     },
 
     get displayHotels() {
+      if (!this.lastSearched) return this.hotels;
       if (!this.checkedHotel) return this.hotels;
       const checked = this.checkedHotel;
       const maxScore = Math.max(
