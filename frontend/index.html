@@ -107,8 +107,9 @@
                             <p class="hotel-price"><strong x-text="'€ ' + h.price_per_night.toFixed(0)"></strong> / ночь</p>
                         </template>
                         <p class="hotel-location" x-text="'Локация: ' + h.location_score + '/10'"></p>
-                        <div class="hotel-extra" x-show="h.quality_score != null || h.final_score != null">
+                        <div class="hotel-extra" x-show="h.quality_score != null || h.final_score != null || (h.consistency_score != null && h.consistency_score < 0.6)">
                             <p x-show="h.quality_score != null"><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Value: <span x-text="h.value_for_money"></span></p>
+                            <p x-show="h.consistency_score != null && h.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((h.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
                             <p x-show="h.red_flags && h.red_flags.length" class="red-flags">⚠ <span x-text="h.red_flags.join(', ')"></span></p>
                             <p x-show="h.pros && h.pros.length"><strong>Плюсы:</strong> <span x-text="h.pros.join('; ')"></span></p>
                             <p x-show="h.cons && h.cons.length"><strong>Минусы:</strong> <span x-text="h.cons.join('; ')"></span></p>
@@ -179,8 +180,9 @@
                         <p class="hotel-price"><strong x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></strong> / ночь</p>
                     </template>
                     <p class="hotel-location" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
-                    <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null">
+                    <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null || (checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6)">
                         <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
+                        <p x-show="checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((checkedHotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
                         <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
                         <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>
                         <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>

@@ -613,6 +613,11 @@ label.btn.btn-json {
   font-size: 0.9rem;
 }
 
+.hotel-extra .hotel-consistency {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
 .hotel-extra .red-flags {
   color: var(--error);
 }
