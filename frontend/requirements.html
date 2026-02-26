@@ -101,6 +101,10 @@
           async init() {
             const loaded = await loadProfile();
             this.profile = { ...defaultProfile(), ...loaded };
+            const self = this;
+            const saveOnLeave = () => saveProfileLocal(self.profile);
+            window.addEventListener('beforeunload', saveOnLeave);
+            window.addEventListener('pagehide', saveOnLeave);
           },
           async saveProfile() {
             const ok = await saveProfile(this.profile);

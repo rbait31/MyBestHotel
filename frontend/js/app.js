@@ -195,9 +195,7 @@ function app() {
     },
 
     async init() {
-      this.profile = await loadProfile();
-      this.searchBudgetMin = this.profile.budget_min ?? null;
-      this.searchBudgetMax = this.profile.budget_max ?? null;
+      await this.syncProfileFromStorage();
       this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
       this.hotelSuggestions = HOTELS.map((h) => ({ value: h.name, label: h.name, city: h.city }));
       this.$watch("city", (value) => this.onCityChange(value));
@@ -208,6 +206,15 @@ function app() {
       } catch {
         this.backendOk = false;
       }
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) this.syncProfileFromStorage();
+      });
+    },
+
+    async syncProfileFromStorage() {
+      this.profile = await loadProfile();
+      this.searchBudgetMin = this.profile.budget_min ?? null;
+      this.searchBudgetMax = this.profile.budget_max ?? null;
     },
 
     onCityChange(city) {
