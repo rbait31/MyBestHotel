@@ -28,10 +28,8 @@
                 <template x-for="item in choices" :key="item.hotel.id">
                     <article class="card hotel-card">
                         <h3 class="hotel-name" x-text="item.hotel.name"></h3>
+                        <p class="hotel-selected-date" x-show="item.selectedAt" x-text="formatDate(item.selectedAt)"></p>
                         <p class="hotel-meta"><span x-text="item.hotel.district || ''"></span> · Рейтинг <span x-text="item.hotel.rating || '—'"></span></p>
-                        <p class="hotel-selected-date" x-show="item.selectedAt">
-                            <strong>Дата выбора:</strong> <span x-text="formatDate(item.selectedAt)"></span>
-                        </p>
                         <div class="hotel-highlights">
                             <template x-if="item.hotel.final_score != null">
                                 <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="item.hotel.final_score + '/10'"></span></div>
