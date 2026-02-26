@@ -18,9 +18,11 @@
     <main class="main">
         <section class="card">
             <h2 x-show="choices.length > 0">Выбранные отели</h2>
-            <div x-show="choices.length === 0">
-                <p class="message message-info">У вас нет выбранных отелей</p>
-                <a href="index.html" class="btn btn-back-search">Вернуться к поиску</a>
+            <div x-show="choices.length === 0" class="profile-actions profile-actions-my-choice">
+                <div class="profile-actions-left">
+                    <p class="message message-info">У вас нет выбранных отелей</p>
+                    <a href="index.html" class="btn btn-secondary profile-back">Вернуться к поиску</a>
+                </div>
             </div>
             <div class="hotel-grid" x-show="choices.length > 0">
                 <template x-for="item in choices" :key="item.hotel.id">
@@ -50,7 +52,9 @@
                 </template>
             </div>
 
-            <a href="index.html" class="btn btn-back-search" x-show="choices.length > 0">Вернуться к поиску</a>
+            <div class="profile-actions" x-show="choices.length > 0">
+                <a href="index.html" class="btn btn-secondary profile-back">Вернуться к поиску</a>
+            </div>
         </section>
     </main>
 
