@@ -10,9 +10,9 @@
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  FRONTEND (HTML + Alpine.js/Vanilla JS)                                      │
-│  • Форма поиска (город, даты, профиль)                                       │
+│  • Форма поиска (город, даты, профиль) + Проверить гостиницу                 │
 │  • Требования к гостинице: API → PostgreSQL, fallback localStorage           │
-│  • Результаты (отели, scores, риски, плюсы/минусы)                           │
+│  • Результаты (отели, scores, риски, плюсы/минусы), Мой выбор, скачать .md   │
 └─────────────────────────────────────────────────────────────────────────────┘
                                        │
                                        │ REST API
@@ -107,15 +107,17 @@
 MyBestHotel/
 │
 ├── frontend/                    # Статический фронтенд (Vercel)
-│   ├── index.html               # Главная страница
+│   ├── index.html               # Главная страница (поиск, «Проверить гостиницу», карточки)
 │   ├── requirements.html        # Требования к гостинице (профиль)
+│   ├── my-choice.html           # Мой выбор — сохранённые отели (localStorage)
 │   ├── css/
 │   │   └── style.css
 │   ├── js/
 │   │   ├── config.js            # API_BASE (URL бэкенда)
-│   │   ├── app.js               # Логика приложения
+│   │   ├── app.js               # Логика приложения (Alpine.js, autocomplete, myChoices)
+│   │   ├── api.js               # Вызовы к backend
 │   │   ├── profile.js           # Профиль: API (PostgreSQL), fallback localStorage
-│   │   └── api.js               # Вызовы к backend
+│   │   └── hotel-card.js        # hotelToMarkdown(), downloadHotelCard() — скачивание .md
 │   └── assets/
 │       └── (иконки при необходимости)
 │

@@ -2,6 +2,8 @@
 
 Система выбора отеля по отзывам и профилю путешественника. AI-анализ отзывов (Groq) с учётом предпочтений и критичных red flags, mock price engine, персонализированный scoring по весам профиля.
 
+**Страницы:** поиск (`index.html`), требования к гостинице (`requirements.html`), мой выбор (`my-choice.html`).
+
 ## Production
 
 - **Фронт:** [mybesthotel.vercel.app](https://mybesthotel.vercel.app)
