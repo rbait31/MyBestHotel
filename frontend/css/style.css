@@ -913,6 +913,22 @@ label.btn.btn-json {
     margin-bottom: 0.75rem;
   }
 
+  /* Выпадашки как оверлей снизу — не резервируют место в форме */
+  .city-autocomplete-dropdown,
+  .hotel-autocomplete-dropdown {
+    position: fixed !important;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0;
+    top: auto !important;
+    margin-top: 0 !important;
+    max-width: none !important;
+    max-height: 40vh;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   .hotel-grid {
     grid-template-columns: 1fr;
   }
