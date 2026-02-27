@@ -112,6 +112,20 @@ function app() {
     myChoices: [],
     countryOptions: [],
     countryLocked: false,
+    mobileTab: "search",
+
+    setMobileTab(tab) {
+      this.mobileTab = tab;
+    },
+    formatDate(iso) {
+      if (!iso) return "—";
+      try {
+        const d = new Date(iso);
+        return d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+      } catch {
+        return iso;
+      }
+    },
 
     get myChoiceIds() {
       return this.myChoices.map((x) => x.hotel?.id).filter(Boolean);

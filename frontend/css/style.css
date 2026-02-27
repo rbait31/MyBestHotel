@@ -762,6 +762,120 @@ label.btn.btn-json {
   color: var(--text-muted);
 }
 
+/* Нижний тап-бар — только на мобильных */
+.tab-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(56px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.tab-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 4px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab-bar-item:hover {
+  color: var(--text);
+}
+
+.tab-bar-active {
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+
+.tab-bar-icon {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.tab-bar-active .tab-bar-icon {
+  opacity: 1;
+}
+
+.tab-bar-label {
+  line-height: 1.1;
+}
+
+.tab-bar-badge {
+  position: absolute;
+  top: 4px;
+  right: 20%;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Мобильные панели — переключение по вкладкам */
+.mobile-tab-panel {
+  display: block;
+}
+
+.main-with-tabbar {
+  padding-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .tab-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .main-with-tabbar {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-tab-panel {
+    display: none;
+  }
+
+  .mobile-tab-panel.mobile-tab-active {
+    display: block;
+  }
+
+  .mobile-choice-section h2 {
+    margin-top: 0;
+  }
+
+  .search-form-header-links .search-form-settings[href="my-choice.html"] {
+    display: none;
+  }
+}
+
+@media (min-width: 601px) {
+  .tab-bar {
+    display: none !important;
+  }
+}
+
 @media (max-width: 600px) {
   .main {
     padding: 1rem;
