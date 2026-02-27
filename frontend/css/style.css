@@ -888,11 +888,29 @@ label.btn.btn-json {
 
   .form-row {
     flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
   }
 
-  .form label input,
+  .form label {
+    margin-bottom: 0.25rem;
+  }
+
+  .form label input[type="text"],
+  .form label input[type="number"],
+  .form label input[type="date"],
   .form select {
     max-width: none;
+    margin-top: 0.15rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .form-hint {
+    margin: 0.35rem 0 0.6rem 0;
+  }
+
+  .search-form-header {
+    margin-bottom: 0.75rem;
   }
 
   .hotel-grid {
