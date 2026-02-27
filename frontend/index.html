@@ -78,8 +78,8 @@
                         Страна
                         <select id="search-country" name="country" autocomplete="country-name" x-model="country" :class="{ 'field-invalid': invalidFields.country, 'field-auto': countryLocked }" :disabled="countryLocked">
                             <option value="">Выберите страну</option>
-                            <option value="France">France</option>
-                            <option value="Spain">Spain</option>
+                            <option value="France">Франция</option>
+                            <option value="Spain">Испания</option>
                         </select>
                     </label>
                 </div>
@@ -138,7 +138,7 @@
                         </div>
                         <p class="hotel-location" x-show="h.location_score != null" x-text="'Локация: ' + h.location_score + '/10'"></p>
                         <div class="hotel-extra" x-show="h.quality_score != null || h.final_score != null || (h.consistency_score != null && h.consistency_score < 0.6)">
-                            <p x-show="h.quality_score != null"><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Value: <span x-text="h.value_for_money"></span></p>
+                            <p x-show="h.quality_score != null"><strong>Оценка:</strong> <span x-text="h.quality_score"></span> · Соотношение цена/качество: <span x-text="h.value_for_money"></span></p>
                             <p x-show="h.consistency_score != null && h.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((h.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
                             <p x-show="h.red_flags && h.red_flags.length" class="red-flags">⚠ <span x-text="h.red_flags.join(', ')"></span></p>
                             <p x-show="h.pros && h.pros.length"><strong>Плюсы:</strong> <span x-text="h.pros.join('; ')"></span></p>
@@ -178,7 +178,7 @@
                                 <template x-for="h in hotelSuggestions" :key="h.value">
                                     <button type="button" class="hotel-autocomplete-item"
                                         @click="selectHotel(h.value)"
-                                        x-text="h.label + (h.city ? ' (' + h.city + ')' : '')">
+                                        x-text="h.label + (h.city ? ' (' + cityLabel(h.city) + ')' : '')">
                                     </button>
                                 </template>
                                 <p x-show="checkHotelInput.length > 0 && hotelSuggestions.length === 0" class="hotel-autocomplete-empty">
@@ -223,7 +223,7 @@
                             </div>
                             <p class="hotel-location" x-show="checkedHotel.location_score != null" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
                             <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null || (checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6)">
-                                <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
+                                <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Соотношение цена/качество: <span x-text="checkedHotel.value_for_money"></span></p>
                                 <p x-show="checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((checkedHotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
                                 <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
                                 <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>

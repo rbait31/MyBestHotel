@@ -40,7 +40,7 @@
                         </div>
                         <p class="hotel-location" x-show="item.hotel.location_score != null" x-text="'Локация: ' + item.hotel.location_score + '/10'"></p>
                         <div class="hotel-extra" x-show="item.hotel.quality_score != null || item.hotel.final_score != null || (item.hotel.consistency_score != null && item.hotel.consistency_score < 0.6)">
-                            <p x-show="item.hotel.quality_score != null"><strong>Оценка:</strong> <span x-text="item.hotel.quality_score"></span> · Value: <span x-text="item.hotel.value_for_money"></span></p>
+                            <p x-show="item.hotel.quality_score != null"><strong>Оценка:</strong> <span x-text="item.hotel.quality_score"></span> · Соотношение цена/качество: <span x-text="item.hotel.value_for_money"></span></p>
                             <p x-show="item.hotel.consistency_score != null && item.hotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((item.hotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
                             <p x-show="item.hotel.red_flags && item.hotel.red_flags.length" class="red-flags">⚠ <span x-text="item.hotel.red_flags.join(', ')"></span></p>
                             <p x-show="item.hotel.pros && item.hotel.pros.length"><strong>Плюсы:</strong> <span x-text="item.hotel.pros.join('; ')"></span></p>

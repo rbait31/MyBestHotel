@@ -22,7 +22,7 @@ function hotelToMarkdown(hotel) {
     lines.push("");
   }
   if (h.quality_score != null) {
-    lines.push("**Оценка:** " + h.quality_score + (h.value_for_money != null ? " · Value: " + h.value_for_money : ""));
+    lines.push("**Оценка:** " + h.quality_score + (h.value_for_money != null ? " · Соотношение цена/качество: " + h.value_for_money : ""));
     lines.push("");
   }
   if (h.consistency_score != null && h.consistency_score < 0.6) {

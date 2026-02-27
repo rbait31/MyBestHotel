@@ -3,15 +3,17 @@
  * Город → страна (однозначно)
  */
 const CITIES = [
-  { value: "Paris", label: "Paris", searchTerms: ["paris", "париж"] },
-  { value: "Barcelona", label: "Barcelona", searchTerms: ["barcelona", "барселона"] },
-  { value: "Madrid", label: "Madrid", searchTerms: ["madrid", "мадрид"] },
+  { value: "Paris", label: "Париж", searchTerms: ["paris", "париж"] },
+  { value: "Barcelona", label: "Барселона", searchTerms: ["barcelona", "барселона"] },
+  { value: "Madrid", label: "Мадрид", searchTerms: ["madrid", "мадрид"] },
 ];
 const CITY_TO_COUNTRY = {
   Paris: "France",
   Barcelona: "Spain",
   Madrid: "Spain",
 };
+const CITY_LABELS = { Paris: "Париж", Barcelona: "Барселона", Madrid: "Мадрид" };
+const COUNTRY_LABELS = { France: "Франция", Spain: "Испания" };
 /** Город → [страны/штаты], если город есть в нескольких странах */
 const CITY_TO_MULTIPLE = {};
 /** Все страны для fallback (неизвестный город) */
@@ -116,6 +118,12 @@ function app() {
 
     setMobileTab(tab) {
       this.mobileTab = tab;
+    },
+    cityLabel(city) {
+      return city ? (CITY_LABELS[city] || city) : "";
+    },
+    countryLabel(country) {
+      return country ? (COUNTRY_LABELS[country] || country) : "";
     },
     formatDate(iso) {
       if (!iso) return "—";
@@ -476,7 +484,7 @@ function app() {
     get hotelHintText() {
       const parts = [];
       for (const [city, names] of Object.entries(HOTEL_HINT_EXAMPLES)) {
-        parts.push(city + " — " + names.join(", "));
+        parts.push((CITY_LABELS[city] || city) + " — " + names.join(", "));
       }
       return "Сейчас в системе рассматриваются отели: " + parts.join("; ");
     },
