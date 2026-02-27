@@ -89,12 +89,13 @@ Respond with ONLY a valid JSON object (no markdown, no explanation), with these 
 - location: number 0-10
 - staff: number 0-10
 - risk_weight: number 0-1 (0=no risk, 1=high risk)
-- red_flags: array of strings — ONLY if reviews explicitly mention the issue (e.g. ["dirty"] if reviews say dirty). Do NOT add "noise" if reviews say "quiet at night".
-- pros: array of short strings (max 5)
-- cons: array of short strings (max 5)
-IMPORTANT: red_flags and pros must be consistent. If reviews say "quiet at night", do NOT add "noise" to red_flags.
+- red_flags: array of short strings IN RUSSIAN — ONLY if reviews explicitly mention the issue (e.g. ["грязно"] if reviews say dirty). Do NOT add "шум" if reviews say "quiet at night".
+- pros: array of short strings IN RUSSIAN (max 5). Examples: "Отличное расположение", "Чистые номера"
+- cons: array of short strings IN RUSSIAN (max 5). Examples: "Маленькая ванная", "Шумно ночью"
+IMPORTANT: red_flags and pros must be consistent. If reviews say "quiet at night", do NOT add "шум" to red_flags.
 - consistency_score: number 0-1 (1=reviews agree)
 - verdict: one short sentence in Russian for the traveler
+ALL text fields (red_flags, pros, cons, verdict) MUST be in Russian.
 If data is insufficient, use null for numbers and [] for arrays, and set verdict to "Недостаточно отзывов для вывода."
 """
 
@@ -154,9 +155,9 @@ def analyze_reviews(
         return _fallback_analysis(reviews)
 
 
-# Противоречия: ключевые слова для noise в red_flags vs тишина в pros
-_NOISE_RED_FLAG_TERMS = ("noise", "noisy", "noise all night", "night noise", "loud")
-_QUIET_PRO_TERMS = ("quiet", "peaceful", "silent", "calm", "тихий", "спокойн")
+# Противоречия: ключевые слова для noise в red_flags vs тишина в pros (English + Russian)
+_NOISE_RED_FLAG_TERMS = ("noise", "noisy", "noise all night", "night noise", "loud", "шум", "шумно", "громко")
+_QUIET_PRO_TERMS = ("quiet", "peaceful", "silent", "calm", "тихий", "тихо", "спокойн", "мирн")
 
 
 def _resolve_contradictions(red_flags: list[str], pros: list[str], cons: list[str]) -> tuple[list[str], list[str], list[str]]:
