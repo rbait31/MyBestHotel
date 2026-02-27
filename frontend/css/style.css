@@ -878,7 +878,12 @@ label.btn.btn-json {
 
 @media (max-width: 600px) {
   .main {
+    padding: 0.75rem;
+  }
+
+  .card {
     padding: 1rem;
+    margin-bottom: 1rem;
   }
 
   .form-row {
