@@ -205,36 +205,40 @@
         </p>
 
         <!-- Результат проверки гостиницы — отдельная карточка под блоком Проверить -->
-        <section x-show="checkedHotel && !checkHotelLoading" class="results" id="check-hotel-result">
-            <h2>Результат проверки</h2>
-            <div class="hotel-grid">
-                <article class="card hotel-card">
-                    <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
-                    <p class="hotel-meta">Рейтинг <span x-text="checkedHotel.rating || '—'"></span></p>
-                    <div class="hotel-highlights">
-                        <template x-if="checkedHotel.final_score != null">
-                            <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="checkedHotel.final_score + '/10'"></span></div>
-                        </template>
-                        <template x-if="checkedHotel.price_per_night != null">
-                            <div class="hotel-price"><span class="hotel-price-value" x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></span><span class="hotel-price-label">/ ночь</span></div>
-                        </template>
+        <section class="results" id="check-hotel-result">
+            <template x-if="checkedHotel && !checkHotelLoading">
+                <div>
+                    <h2>Результат проверки</h2>
+                    <div class="hotel-grid">
+                        <article class="card hotel-card">
+                            <h3 class="hotel-name" x-text="checkedHotel.name"></h3>
+                            <p class="hotel-meta">Рейтинг <span x-text="checkedHotel.rating || '—'"></span></p>
+                            <div class="hotel-highlights">
+                                <template x-if="checkedHotel.final_score != null">
+                                    <div class="hotel-final-score"><span class="hotel-final-score-label">Итоговая оценка</span><span class="hotel-final-score-value" x-text="checkedHotel.final_score + '/10'"></span></div>
+                                </template>
+                                <template x-if="checkedHotel.price_per_night != null">
+                                    <div class="hotel-price"><span class="hotel-price-value" x-text="'€ ' + checkedHotel.price_per_night.toFixed(0)"></span><span class="hotel-price-label">/ ночь</span></div>
+                                </template>
+                            </div>
+                            <p class="hotel-location" x-show="checkedHotel.location_score != null" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
+                            <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null || (checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6)">
+                                <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
+                                <p x-show="checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((checkedHotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
+                                <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
+                                <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>
+                                <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>
+                                <p class="verdict" x-show="checkedHotel.verdict" x-text="checkedHotel.verdict"></p>
+                            </div>
+                            <label class="hotel-my-choice" :title="'Эта информация будет использована ИИ в будущем для оценки отелей в других поездках'">
+                                <input type="checkbox" :checked="isMyChoice(checkedHotel.id)" @change="toggleMyChoice(checkedHotel)" />
+                                <span>Мой выбор</span>
+                            </label>
+                            <button type="button" class="btn btn-secondary btn-download-card" @click="downloadHotelCard(checkedHotel)">Скачать карточку</button>
+                        </article>
                     </div>
-                    <p class="hotel-location" x-show="checkedHotel.location_score != null" x-text="'Локация: ' + checkedHotel.location_score + '/10'"></p>
-                    <div class="hotel-extra" x-show="checkedHotel.quality_score != null || checkedHotel.final_score != null || (checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6)">
-                        <p x-show="checkedHotel.quality_score != null"><strong>Оценка:</strong> <span x-text="checkedHotel.quality_score"></span> · Value: <span x-text="checkedHotel.value_for_money"></span></p>
-                        <p x-show="checkedHotel.consistency_score != null && checkedHotel.consistency_score < 0.6" class="hotel-consistency"><strong>Согласованность отзывов:</strong> <span x-text="Math.round((checkedHotel.consistency_score || 0) * 100) + '%'"></span> — отзывы могут противоречить друг другу</p>
-                        <p x-show="checkedHotel.red_flags && checkedHotel.red_flags.length" class="red-flags">⚠ <span x-text="checkedHotel.red_flags.join(', ')"></span></p>
-                        <p x-show="checkedHotel.pros && checkedHotel.pros.length"><strong>Плюсы:</strong> <span x-text="checkedHotel.pros.join('; ')"></span></p>
-                        <p x-show="checkedHotel.cons && checkedHotel.cons.length"><strong>Минусы:</strong> <span x-text="checkedHotel.cons.join('; ')"></span></p>
-                        <p class="verdict" x-show="checkedHotel.verdict" x-text="checkedHotel.verdict"></p>
-                    </div>
-                    <label class="hotel-my-choice" :title="'Эта информация будет использована ИИ в будущем для оценки отелей в других поездках'">
-                        <input type="checkbox" :checked="isMyChoice(checkedHotel.id)" @change="toggleMyChoice(checkedHotel)" />
-                        <span>Мой выбор</span>
-                    </label>
-                    <button type="button" class="btn btn-secondary btn-download-card" @click="downloadHotelCard(checkedHotel)">Скачать карточку</button>
-                </article>
-            </div>
+                </div>
+            </template>
         </section>
         </div>
 
