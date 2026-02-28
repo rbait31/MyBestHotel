@@ -412,6 +412,12 @@ function app() {
       }
       this.loading = true;
       this.lastSearched = false;
+      const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
+      if (isMobile) {
+        this.$nextTick(() => {
+          document.getElementById("msg-loading")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+      }
       try {
         const profileForSearch = { ...this.profile };
         const effMin = this.getEffectiveBudgetMin();
@@ -428,7 +434,12 @@ function app() {
         const data = await searchWithAI(body);
         this.hotels = data.hotels || [];
         this.lastSearched = true;
-        if (this.hotels.length > 0) {
+        if (isMobile) {
+          this.$nextTick(() => {
+            const target = document.getElementById("profile-search-hint") || document.getElementById("results");
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        } else if (this.hotels.length > 0) {
           document.getElementById("results")?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       } catch (e) {
@@ -438,7 +449,13 @@ function app() {
           ? "Сервер недоступен. Запустите бэкенд: uvicorn backend.main:app --reload"
           : msg;
         this.hotels = [];
-        document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (isMobile) {
+          this.$nextTick(() => {
+            document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
+          });
+        } else {
+          document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
       } finally {
         this.loading = false;
       }
