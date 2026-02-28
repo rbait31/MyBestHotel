@@ -937,6 +937,11 @@ label.btn.btn-json {
     margin-bottom: 0.75rem;
   }
 
+  /* Отступ под кнопкой «Найти», чтобы не перекрывалась таб-баром */
+  .search-form .form .btn-primary {
+    margin-bottom: 4rem;
+  }
+
   /* Подсказка по городам и отелям — под полем ввода, как у селекта страны */
   .city-autocomplete-dropdown,
   .hotel-autocomplete-dropdown {
