@@ -888,12 +888,22 @@ label.btn.btn-json {
 
   .form-row {
     flex-direction: column;
-    gap: 0.35rem;
-    margin-bottom: 0.5rem;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .form-row label {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+
+  .form-row label + label {
+    margin-top: 0.5rem;
   }
 
   .form label {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
   }
 
   .form label input[type="text"],
@@ -905,8 +915,22 @@ label.btn.btn-json {
     padding: 0.4rem 0.5rem;
   }
 
+  .city-autocomplete-wrap,
+  .hotel-autocomplete-wrap {
+    flex: 0 0 auto;
+  }
+
+  /* Подсказка под полем города — скрыта на мобильных, чтобы не резервировать место */
+  .form-hint-city {
+    display: none;
+  }
+
+  .form-hint-hotel {
+    display: none;
+  }
+
   .form-hint {
-    margin: 0.35rem 0 0.6rem 0;
+    margin: 0.35rem 0 0.5rem 0;
   }
 
   .search-form-header {
