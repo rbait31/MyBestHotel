@@ -317,7 +317,8 @@ function app() {
 
     async init() {
       await this.syncProfileFromStorage();
-      this.myChoices = loadMyChoices();
+      this.myChoices = [];
+      saveMyChoices([]);
       this.citySuggestions = CITIES.map((c) => ({ value: c.value, label: c.label }));
       this.hotelSuggestions = HOTELS.map((h) => ({ value: h.name, label: h.name, city: h.city }));
       this.$watch("city", (value) => this.onCityChange(value));
@@ -331,7 +332,8 @@ function app() {
       window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
           this.syncProfileFromStorage();
-          this.myChoices = loadMyChoices();
+          this.myChoices = [];
+          saveMyChoices([]);
         }
       });
     },
@@ -410,6 +412,8 @@ function app() {
         document.getElementById("msg-error")?.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
+      this.myChoices = [];
+      saveMyChoices([]);
       this.loading = true;
       this.lastSearched = false;
       const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
