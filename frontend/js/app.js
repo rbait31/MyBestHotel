@@ -3,9 +3,9 @@
  * Город → страна (однозначно)
  */
 const CITIES = [
-  { value: "Paris", label: "Париж", searchTerms: ["paris", "париж"] },
-  { value: "Barcelona", label: "Барселона", searchTerms: ["barcelona", "барселона"] },
-  { value: "Madrid", label: "Мадрид", searchTerms: ["madrid", "мадрид"] },
+  { value: "Paris", label: "Париж", searchTerms: ["p", "paris", "п", "париж"] },
+  { value: "Barcelona", label: "Барселона", searchTerms: ["b", "barcelona", "б", "барселона"] },
+  { value: "Madrid", label: "Мадрид", searchTerms: ["m", "madrid", "м", "мадрид"] },
 ];
 const CITY_TO_COUNTRY = {
   Paris: "France",
