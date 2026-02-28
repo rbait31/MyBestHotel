@@ -850,7 +850,7 @@ label.btn.btn-json {
   }
 
   .main-with-tabbar {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
   }
 
   .mobile-tab-panel {
@@ -947,5 +947,6 @@ label.btn.btn-json {
 
   .hotel-grid {
     grid-template-columns: 1fr;
+    padding-bottom: 2rem;
   }
 }
